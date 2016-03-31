@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -69,11 +70,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
-        LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
+       // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
         float zoomlevel = 15;
+        //adds a marker at the lat lng of st stephens green
         mMap.addMarker(new MarkerOptions().position(Ststephensgreen).title("Your tent").draggable(true));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Ststephensgreen,zoomlevel));
+        //sets where camera starts and the zoom level of the camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Ststephensgreen, zoomlevel));
+        // user location showed
         mMap.setMyLocationEnabled(true);
+        //new zoom options
+        UiSettings.setZoomControlsEnabled(true);
 
 
     }
