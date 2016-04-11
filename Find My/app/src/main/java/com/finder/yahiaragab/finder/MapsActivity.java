@@ -172,6 +172,14 @@ public class MapsActivity extends FragmentActivity
 //        return true;
 //    }
 
+    @Override
+    public void onMapClick(LatLng latLng) {
 
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        mMap.addMarker(new MarkerOptions().position(latLng).title("Your tent").draggable(true));
+    }
 
 }
