@@ -70,8 +70,10 @@ public class MapsActivity extends FragmentActivity
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
+        mMap.setOnMapLongClickListener(this);
 
         // Add a marker in Sydney and move the camera
         LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
