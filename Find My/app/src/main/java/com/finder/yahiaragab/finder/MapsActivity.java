@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MapsActivity extends FragmentActivity
@@ -38,6 +39,7 @@ public class MapsActivity extends FragmentActivity
 {
 
     private GoogleMap mMap;
+    private ArrayList<Marker> markers = new ArrayList<Marker>();
     private SensorManager sensormanager;
     private Sensor accelerometer;
     private float last_x, last_y, last_z;
@@ -174,15 +176,23 @@ public class MapsActivity extends FragmentActivity
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void onMapClick(LatLng latLng)
+    {
 
     }
 
     @Override
-    public void onMapLongClick(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Your tent").draggable(true));
+    public void onMapLongClick(LatLng latLng)
+    {
+        markers.add(
+                mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("Your tent")
+                .draggable(true)));
+
+
     }
 
 
-    
+
 }
