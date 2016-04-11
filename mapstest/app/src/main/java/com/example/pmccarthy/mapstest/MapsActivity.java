@@ -92,6 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
         //new zoom options
         //UiSettings.setZoomControlsEnabled(true);
 
