@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -34,6 +35,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private SensorManager sensormanager;
     private Sensor accelerometer;
+    Location location;
+    double user_lat;
+    double user_lng;
     private float last_x, last_y, last_z;
     long lastUpdate = 0;
     /**
@@ -69,17 +73,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
-       // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
+
+        //user_lat = location.getLatitude();
+        //user_lng = location.getLongitude();
+        LatLng Ststephensgreen = new LatLng(user_lat, user_lng);
+        user_lat = -50.5555;
+        user_lng = 61.55;
+
+        //LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
         float zoomlevel = 15;
         //adds a marker at the lat lng of st stephens green
         mMap.addMarker(new MarkerOptions().position(Ststephensgreen).title("Your tent").draggable(true));
+        mMap.addMarker(new MarkerOptions().position(-53.5555,62.55).title("Your tent").draggable(true));
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Ststephensgreen, zoomlevel));
         // user location showed
         mMap.setMyLocationEnabled(true);
+
+
+
         //new zoom options
-        UiSettings.setZoomControlsEnabled(true);
+        //UiSettings.setZoomControlsEnabled(true);
 
 
     }
