@@ -34,7 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener {
+        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener
+{
 
     private GoogleMap mMap;
     private SensorManager sensormanager;
@@ -136,41 +137,41 @@ public class MapsActivity extends FragmentActivity
     public float yy;
 
 
-//    @Override
-//    public boolean onTouch(View v, MotionEvent me)
-//    {
-//        xx = me.getX();
-//        yy = me.getY();
-//
-//        switch (me.getAction())
-//        {
-//            case MotionEvent.ACTION_DOWN:
-//
-//                LatLng pin = new LatLng(xx, yy);
-//                // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
-//                float zoomlevel = 15;
-//                //adds a marker at the lat lng of st stephens green
-//                mMap.addMarker(new MarkerOptions().position(pin).title("Your tent").draggable(true));
-//                //sets where camera starts and the zoom level of the camera
-//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, zoomlevel));
-//
-//                break;
-//
-//
-//            case MotionEvent.ACTION_UP:
-//
-//                break;
-//
-//            case MotionEvent.ACTION_MOVE:
-//
-//                break;
-//
-//
-//        }
-//
-//
-//        return true;
-//    }
+    @Override
+    public boolean onTouch(View v, MotionEvent me)
+    {
+        xx = me.getX();
+        yy = me.getY();
+
+        switch (me.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+
+                LatLng pin = new LatLng(xx, yy);
+                // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
+                float zoomlevel = 15;
+                //adds a marker at the lat lng of st stephens green
+                mMap.addMarker(new MarkerOptions().position(pin).title("Your tent").draggable(true));
+                //sets where camera starts and the zoom level of the camera
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, zoomlevel));
+
+                break;
+
+
+            case MotionEvent.ACTION_UP:
+
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+
+                break;
+
+
+        }
+
+
+        return true;
+    }
 
     @Override
     public void onMapClick(LatLng latLng) {
@@ -182,4 +183,6 @@ public class MapsActivity extends FragmentActivity
         mMap.addMarker(new MarkerOptions().position(latLng).title("Your tent").draggable(true));
     }
 
+
+    
 }
