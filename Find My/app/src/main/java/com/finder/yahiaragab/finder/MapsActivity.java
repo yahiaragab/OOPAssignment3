@@ -190,7 +190,10 @@ public class MapsActivity extends FragmentActivity
                 .title("Your tent")
                 .draggable(true)));
 
-
+        for (int i = 0; i < markers.size(); i++)
+        {
+            System.out.println( "Marker " + i + " is at position: " + markers.get(i).getPosition() );
+        }
     }
 
 
