@@ -1,12 +1,15 @@
 package com.finder.yahiaragab.finder;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -35,8 +38,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener
-{
+        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
+        OnMarkerClickListener {
 
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -73,10 +76,10 @@ public class MapsActivity extends FragmentActivity
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerClickListener(this);
 
         // Add a marker in Sydney and move the camera
         LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
@@ -87,6 +90,17 @@ public class MapsActivity extends FragmentActivity
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Ststephensgreen, zoomlevel));
         // user location showed
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         //new zoom options
 //        UiSettings.setZoomControlsEnabled(true);
@@ -197,5 +211,9 @@ public class MapsActivity extends FragmentActivity
     }
 
 
-
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+        return true;
+    }
 }
