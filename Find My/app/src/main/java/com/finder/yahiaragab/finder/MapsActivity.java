@@ -1,12 +1,15 @@
 package com.finder.yahiaragab.finder;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -16,6 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,13 +37,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import com.google.android.gms.common.ConnectionResult;
+//import com.google.android.gms.common.GooglePlayServicesUtil;
+import android.app.Dialog;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener
-{
+        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
+        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener {
 
     private GoogleMap mMap;
+    private ArrayList<Marker> markers = new ArrayList<Marker>();
     private SensorManager sensormanager;
     private Sensor accelerometer;
     private float last_x, last_y, last_z;
@@ -58,6 +69,7 @@ public class MapsActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
 
@@ -71,10 +83,22 @@ public class MapsActivity extends FragmentActivity
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnInfoWindowLongClickListener(this);
+
+//        // Setting click event handler for InfoWIndow
+//        mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+//
+//            @Override
+//            public void onInfoWindowClick(Marker marker) {
+//                // Remove the marker
+//                marker.remove();
+//            }
+//        });
 
         // Add a marker in Sydney and move the camera
         LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
@@ -85,6 +109,17 @@ public class MapsActivity extends FragmentActivity
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Ststephensgreen, zoomlevel));
         // user location showed
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mMap.setMyLocationEnabled(true);
         //new zoom options
 //        UiSettings.setZoomControlsEnabled(true);
@@ -174,15 +209,49 @@ public class MapsActivity extends FragmentActivity
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void onMapClick(LatLng latLng)
+    {
 
     }
 
     @Override
-    public void onMapLongClick(LatLng latLng) {
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Your tent").draggable(true));
+    public void onMapLongClick(LatLng latLng)
+    {
+        markers.add(
+                mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("Your tent")
+                .snippet("Tap and hold to delete pin")
+                .draggable(true)));
+
+        for (int i = 0; i < markers.size(); i++)
+        {
+            System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
+
+        }
     }
 
 
-    
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+        marker.showInfoWindow();
+        return true;
+    }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker)
+    {
+//        Toast.makeText(this, "Pin deleted",
+//                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInfoWindowLongClick(Marker marker)
+    {
+        marker.remove();
+        Toast.makeText(this, "Pin deleted",
+                Toast.LENGTH_SHORT).show();
+    }
 }
