@@ -45,7 +45,7 @@ import android.app.Dialog;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
-        OnMarkerClickListener, OnInfoWindowClickListener {
+        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener {
 
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -220,6 +220,7 @@ public class MapsActivity extends FragmentActivity
                 mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("Your tent")
+                .snippet("Tap to delete pin")
                 .draggable(true)));
 
         for (int i = 0; i < markers.size(); i++)
@@ -239,8 +240,16 @@ public class MapsActivity extends FragmentActivity
 
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "Info window clicked",
+    public void onInfoWindowClick(Marker marker)
+    {
+        Toast.makeText(this, "Pin deleted",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInfoWindowLongClick(Marker marker)
+    {
+        Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
     }
 }
