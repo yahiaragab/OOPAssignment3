@@ -220,7 +220,7 @@ public class MapsActivity extends FragmentActivity
                 mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("Your tent")
-                .snippet("Tap to delete pin")
+                .snippet("Tap and hold to delete pin")
                 .draggable(true)));
 
         for (int i = 0; i < markers.size(); i++)
@@ -249,6 +249,7 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowLongClick(Marker marker)
     {
+        marker.remove();
         Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
     }
