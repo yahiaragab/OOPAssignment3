@@ -88,6 +88,7 @@ public class MapsActivity extends FragmentActivity
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnInfoWindowLongClickListener(this);
 
 //        // Setting click event handler for InfoWIndow
 //        mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -242,8 +243,8 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-        Toast.makeText(this, "Pin deleted",
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Pin deleted",
+//                Toast.LENGTH_SHORT).show();
     }
 
     @Override
