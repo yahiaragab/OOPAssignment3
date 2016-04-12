@@ -33,18 +33,13 @@ import java.util.Date;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private SensorManager sensormanager;
-    private Sensor accelerometer;
+
     Location location;
-    //double user_lat;
-    //double user_lng;
-    private float last_x, last_y, last_z;
-    long lastUpdate = 0;
-    //GPSTracker gps;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    double user_lat;
+    double user_lng;
+
+    GPSTracker gps;
+
     private GoogleApiClient client;
 
     @Override
@@ -79,10 +74,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //user_lng = location.getLongitude();
 
 
-        //gps = new GPSTracker(MapsActivity.this);
+        gps = new GPSTracker(MapsActivity.this);
 
-        double latitude = 0;
-        double longitude = 0;
+        
         LatLng userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 
 
@@ -90,7 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         float zoomlevel = 15;
         //adds a marker at the lat lng of st stephens green
         mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your tent").draggable(true));
-        //mMap.addMarker(new MarkerOptions().position(-53.5555,62.55).title("Your tent").draggable(true));
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, zoomlevel));
         // user location showed
