@@ -21,7 +21,6 @@ public class GPSTracker extends Service implements LocationListener
 {
     private final Context context;
 
-    //variables for class
     boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
@@ -31,10 +30,8 @@ public class GPSTracker extends Service implements LocationListener
     double latitude;
     double longitude;
 
-    // update variables
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
-
 
     protected LocationManager locationManager;
 
@@ -44,42 +41,23 @@ public class GPSTracker extends Service implements LocationListener
         getLocation();
     }
 
-
     public Location getLocation()
     {
         try
         {
-
+            //initializing the location manager
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-            //tests if gps on phone is on
+            //initializing boolean variable
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            // checks if phone has network
+            //initializing boolean variable
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            // checks if Gps and network is on or not
-            if(!isGPSEnabled && !isNetworkEnabled)
-            {
-
-            }
-            else
-            {
-                //changes
-                this.canGetLocation = true;
-
-                if (isNetworkEnabled)
-                {
-
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
         }
         catch (Exception e)
         {
+            //error handling
             e.printStackTrace();
         }
-
-        return location;
     }
 
 }
