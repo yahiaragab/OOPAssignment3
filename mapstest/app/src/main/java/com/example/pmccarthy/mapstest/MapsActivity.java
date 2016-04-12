@@ -78,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //user_lat = location.getLatitude();
         //user_lng = location.getLongitude();
 
-        
+
         //gps = new GPSTracker(MapsActivity.this);
 
         double latitude = 0;
