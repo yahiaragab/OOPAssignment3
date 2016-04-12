@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,10 +39,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import com.google.android.gms.common.ConnectionResult;
+//import com.google.android.gms.common.GooglePlayServicesUtil;
+import android.app.Dialog;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
-        OnMarkerClickListener {
+        OnMarkerClickListener, OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -63,6 +69,7 @@ public class MapsActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
 
@@ -80,6 +87,17 @@ public class MapsActivity extends FragmentActivity
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+
+//        // Setting click event handler for InfoWIndow
+//        mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+//
+//            @Override
+//            public void onInfoWindowClick(Marker marker) {
+//                // Remove the marker
+//                marker.remove();
+//            }
+//        });
 
         // Add a marker in Sydney and move the camera
         LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
@@ -206,7 +224,8 @@ public class MapsActivity extends FragmentActivity
 
         for (int i = 0; i < markers.size(); i++)
         {
-            System.out.println( "Marker " + i + " is at position: " + markers.get(i).getPosition() );
+            System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
+
         }
     }
 
@@ -214,6 +233,14 @@ public class MapsActivity extends FragmentActivity
     @Override
     public boolean onMarkerClick(Marker marker)
     {
+        marker.showInfoWindow();
         return true;
+    }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, "Info window clicked",
+                Toast.LENGTH_SHORT).show();
     }
 }
