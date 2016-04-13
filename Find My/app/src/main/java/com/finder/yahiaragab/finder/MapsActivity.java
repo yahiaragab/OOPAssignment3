@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -265,6 +266,8 @@ public class MapsActivity extends FragmentActivity
     @Override
     public boolean onMarkerClick(Marker marker)
     {
+        DecimalFormat df = new DecimalFormat("#.0");
+
         if (line != null)
         {
             line.remove();
@@ -278,7 +281,7 @@ public class MapsActivity extends FragmentActivity
         line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(marker.getPosition())
                 .color(Color.BLUE).width(15));
 
-        Toast.makeText(this, "Pin: " + distanceInMeters + " away.",
+        Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.",
                 Toast.LENGTH_SHORT).show();
 
         return true;
