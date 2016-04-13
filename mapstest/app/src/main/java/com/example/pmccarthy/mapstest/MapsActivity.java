@@ -1,6 +1,8 @@
 package com.example.pmccarthy.mapstest;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,7 +12,10 @@ import android.location.Location;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -19,24 +24,42 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+
+import com.google.android.gms.maps.GoogleMap.*;
+
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import static com.example.pmccarthy.mapstest.MathUtil.*;
+import static com.example.pmccarthy.mapstest.SphericalUtil.*;
+
+
+import com.google.android.gms.common.ConnectionResult;
+//import com.google.android.gms.common.GooglePlayServicesUtil;
+import android.app.Dialog;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        OnMapLongClickListener, OnMarkerClickListener, OnInfoWindowClickListener,
+        OnInfoWindowLongClickListener, OnMapClickListener {
 
     private GoogleMap mMap;
-
+    private ArrayList<Marker> markers = new ArrayList<Marker>();
     Location location;
     double user_lat;
     double user_lng;
+
+
 
     GPSTracker gps;
 
@@ -67,6 +90,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnInfoWindowLongClickListener(this);
 
         // Add a marker in Sydney and move the camera
 
@@ -76,24 +103,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         gps = new GPSTracker(MapsActivity.this);
 
-        
+
         LatLng userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 
 
-        //LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
+        LatLng Ststephensgreen1 = new LatLng(53.3371175,-6.2676459);
         float zoomlevel = 15;
         //adds a marker at the lat lng of st stephens green
-        mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your tent").draggable(true));
+        //mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your tent").draggable(true));
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, zoomlevel));
         // user location showed
         mMap.setMyLocationEnabled(true);
 
 
+//        double distanceInMeters= 0;
+//        distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, Ststephensgreen1);
+//
+
+//        System.out.println("Distance you are ATTTT  " + userLatLng);
+//
+//        System.out.println("Distance PIN IS AT  " + Ststephensgreen1);
+
 
 
         //new zoom options
         //UiSettings.setZoomControlsEnabled(true);
+
+       
 
 
     }
@@ -138,4 +175,147 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+    public float xx;
+    public float yy;
+
+
+//    @Override
+//    public boolean onTouch(View v, MotionEvent me)
+//    {
+//        xx = me.getX();
+//        yy = me.getY();
+//
+//        switch (me.getAction())
+//        {
+//            case MotionEvent.ACTION_DOWN:
+//
+//                LatLng pin = new LatLng(xx, yy);
+//                // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
+//                float zoomlevel = 15;
+//                //adds a marker at the lat lng of st stephens green
+//                mMap.addMarker(new MarkerOptions().position(pin).title("Your tent").draggable(true));
+//                //sets where camera starts and the zoom level of the camera
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, zoomlevel));
+//
+//                break;
+//
+//
+//            case MotionEvent.ACTION_UP:
+//
+//                break;
+//
+//            case MotionEvent.ACTION_MOVE:
+//
+//                break;
+//
+//
+//        }
+//
+//
+//        return true;
+//    }
+
+    @Override
+    public void onMapClick(LatLng latLng)
+    {
+
+    }
+
+    String markerName;
+
+    @Override
+    public void onMapLongClick(final LatLng latLng)
+    {
+        markerName = " ";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New pin name:");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        // | InputType.TYPE_TEXT_VARIATION_PASSWORD
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                markerName = input.getText().toString();
+
+
+                markers.add(mMap.addMarker(
+                        new MarkerOptions()
+                                .position(latLng)
+                                .title(markerName)
+                                .snippet("Tap and hold to delete pin")
+                                .draggable(true)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))));
+                markerName = " ";
+
+            }
+        });
+        gps = new GPSTracker(MapsActivity.this);
+
+        LatLng userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+//        markers.add(
+//                mMap.addMarker(new MarkerOptions()
+//                        .position(latLng)
+//                        .title(markerName)
+//                        .snippet("Tap and hold to delete pin")
+//                        .draggable(true)));
+        double distanceInMeters= 0;
+
+        for (int i = 0; i < markers.size(); i++)
+        {
+            System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
+            distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, markers.get(i).getPosition());
+
+
+        }
+
+        System.out.println("Distance between two points is " + distanceInMeters);
+        System.out.println("Test");
+
+    }
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+        marker.showInfoWindow();
+        return true;
+    }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker)
+    {
+//        Toast.makeText(this, "Pin deleted",
+//                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInfoWindowLongClick(Marker marker)
+    {
+        marker.remove();
+        Toast.makeText(this, "Pin deleted",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    
 }
+
+
