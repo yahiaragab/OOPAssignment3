@@ -3,6 +3,7 @@ package com.example.pmccarthy.mapstest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -15,7 +16,9 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -58,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Location location;
     double user_lat;
     double user_lng;
-
+    double distanceInMeters= 0;
 
 
     GPSTracker gps;
@@ -75,6 +78,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
+        // HERES THE BUTTON CODE
+        Button button = new Button(this);
+        button.setText("Click me");
+        addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
+            @Override
+            public void onClick(View v)
+            {
+                System.out.println("YOU CLICKED ME");
+
+            }
+
+        });
     }
 
 
@@ -257,6 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+
         gps = new GPSTracker(MapsActivity.this);
 
         LatLng userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
@@ -276,18 +299,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                        .title(markerName)
 //                        .snippet("Tap and hold to delete pin")
 //                        .draggable(true)));
-        double distanceInMeters= 0;
+
 
         for (int i = 0; i < markers.size(); i++)
         {
             System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
-            distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, markers.get(i).getPosition());
 
 
         }
 
-        System.out.println("Distance between two points is " + distanceInMeters);
-        System.out.println("Test");
 
     }
 
@@ -315,7 +335,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.LENGTH_SHORT).show();
     }
 
-    
+
+
+    public void findDist(LatLng userLatLng, Marker marker)
+    {
+        distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
+        System.out.println("The distance between user and this marker is " + distanceInMeters + "(m)");
+    }
+
+
 }
 
 
