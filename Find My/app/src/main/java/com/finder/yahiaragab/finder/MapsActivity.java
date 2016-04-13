@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -46,6 +47,9 @@ import java.util.Date;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
@@ -55,11 +59,13 @@ public class MapsActivity extends FragmentActivity
     private ArrayList<Marker> markers = new ArrayList<Marker>();
     private GoogleApiClient client;
     GPSTracker gps;
-
+    LatLng userLatLng;
+    Polyline line;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -86,8 +92,8 @@ public class MapsActivity extends FragmentActivity
         mMap = googleMap;
 
         gps = new GPSTracker(MapsActivity.this);
-        LatLng userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 
+        userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 
 
         mMap.setOnMapLongClickListener(this);
@@ -95,15 +101,6 @@ public class MapsActivity extends FragmentActivity
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
 
-//        // Setting click event handler for InfoWIndow
-//        mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-//
-//            @Override
-//            public void onInfoWindowClick(Marker marker) {
-//                // Remove the marker
-//                marker.remove();
-//            }
-//        });
 
         // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
         float zoomlevel = 15;
@@ -123,8 +120,18 @@ public class MapsActivity extends FragmentActivity
             return;
         }
         mMap.setMyLocationEnabled(true);
+
+
+
         //new zoom options
 //        UiSettings.setZoomControlsEnabled(true);
+
+//        if (distanceInMeters < 5)
+//        {
+//            Toast.makeText(this, "You are 5 meters away",
+//                    Toast.LENGTH_SHORT).show();
+//
+//        }
 
 
     }
@@ -170,45 +177,25 @@ public class MapsActivity extends FragmentActivity
         client.disconnect();
     }
 
-    public float xx;
-    public float yy;
-
 
     @Override
     public boolean onTouch(View v, MotionEvent me)
     {
-        xx = me.getX();
-        yy = me.getY();
-
-        switch (me.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-
-                LatLng pin = new LatLng(xx, yy);
-                // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
-                float zoomlevel = 15;
-                //adds a marker at the lat lng of st stephens green
-                mMap.addMarker(new MarkerOptions().position(pin).title("Your tent").draggable(true));
-                //sets where camera starts and the zoom level of the camera
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pin, zoomlevel));
-
-                break;
-
-
-            case MotionEvent.ACTION_UP:
-
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-
-                break;
-
-
-        }
-
-
+//        float xx = me.getX();
+//        float yy = me.getY();
+//
+//        switch (me.getAction())
+//        {
+//            case MotionEvent.ACTION_DOWN:
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                break;
+//        }
         return true;
     }
+
 
     @Override
     public void onMapClick(LatLng latLng)
@@ -216,8 +203,12 @@ public class MapsActivity extends FragmentActivity
 
     }
 
+
     private String markerName;
     int pinNum = 1;
+    double distanceInMeters= 0;
+
+
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
@@ -228,9 +219,8 @@ public class MapsActivity extends FragmentActivity
 
         // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        // Specify the type of input expected
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        // | InputType.TYPE_TEXT_VARIATION_PASSWORD
         builder.setView(input);
 
         // Set up the buttons
@@ -239,8 +229,7 @@ public class MapsActivity extends FragmentActivity
             public void onClick(DialogInterface dialog, int which) {
                 markerName = input.getText().toString();
 
-                if (markerName.equals(""))
-                {
+                if (markerName.equals("")) {
                     markerName = "Pin " + pinNum;
                     pinNum++;
                 }
@@ -264,18 +253,12 @@ public class MapsActivity extends FragmentActivity
 
         builder.show();
 
-//        markers.add(
-//                mMap.addMarker(new MarkerOptions()
-//                        .position(latLng)
-//                        .title(markerName)
-//                        .snippet("Tap and hold to delete pin")
-//                        .draggable(true)));
 
         for (int i = 0; i < markers.size(); i++)
         {
             System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
-
         }
+
     }
 
 
@@ -283,6 +266,16 @@ public class MapsActivity extends FragmentActivity
     public boolean onMarkerClick(Marker marker)
     {
         marker.showInfoWindow();
+
+        distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
+        System.out.println("Distance between two points is " + distanceInMeters);
+
+        line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(marker.getPosition())
+                .color(Color.BLUE).width(15));
+
+        Toast.makeText(this, "Pin: " + distanceInMeters + " away.",
+                Toast.LENGTH_SHORT).show();
+
         return true;
     }
 
@@ -290,14 +283,14 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-//        Toast.makeText(this, "Pin deleted",
-//                Toast.LENGTH_SHORT).show();
+        //get directions to this marker
     }
 
     @Override
     public void onInfoWindowLongClick(Marker marker)
     {
-        //
+        //if the user deletes the pin the line is on, delete the line
+
         marker.remove();
 //        marker.setTitle();
         Toast.makeText(this, "Pin deleted",
