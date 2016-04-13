@@ -19,7 +19,9 @@ import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -76,6 +78,24 @@ public class MapsActivity extends FragmentActivity
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+        // HERES THE BUTTON CODE
+        Button button = new Button(this);
+        button.setText("Click me");
+        addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
+            @Override
+            public void onClick(View v)
+            {
+
+
+
+            }
+
+        });
     }
 
 
@@ -204,13 +224,19 @@ public class MapsActivity extends FragmentActivity
     }
 
 
+
+    @Override
+    public void onMapLongClick(final LatLng latLng)
+    {
+        addMarker(latLng);
+
+    }
+
     private String markerName;
     int pinNum = 1;
     double distanceInMeters= 0;
 
-
-    @Override
-    public void onMapLongClick(final LatLng latLng)
+    public void addMarker(final LatLng latLng)
     {
         markerName = "";
 
@@ -266,9 +292,7 @@ public class MapsActivity extends FragmentActivity
 //            sortMarkers(markers.get(markers.size() - 1));
 //        }
 
-
     }
-
 
     @Override
     public boolean onMarkerClick(Marker marker)
