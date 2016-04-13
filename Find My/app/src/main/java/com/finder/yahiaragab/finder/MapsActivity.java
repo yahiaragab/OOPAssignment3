@@ -1,7 +1,9 @@
 package com.finder.yahiaragab.finder;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
@@ -12,9 +14,11 @@ import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -40,7 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import com.google.android.gms.common.ConnectionResult;
-//import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
 
 public class MapsActivity extends FragmentActivity
@@ -49,15 +53,10 @@ public class MapsActivity extends FragmentActivity
 
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
-    private SensorManager sensormanager;
-    private Sensor accelerometer;
-    private float last_x, last_y, last_z;
-    long lastUpdate = 0;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
+    GPSTracker gps;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +84,12 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        gps = new GPSTracker(MapsActivity.this);
+        LatLng userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+
+
+
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
@@ -100,14 +105,11 @@ public class MapsActivity extends FragmentActivity
 //            }
 //        });
 
-        // Add a marker in Sydney and move the camera
-        LatLng Ststephensgreen = new LatLng(53.338340, -6.259376);
         // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
         float zoomlevel = 15;
-        //adds a marker at the lat lng of st stephens green
-        mMap.addMarker(new MarkerOptions().position(Ststephensgreen).title("Your tent").draggable(true));
         //sets where camera starts and the zoom level of the camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Ststephensgreen, zoomlevel));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, zoomlevel));
+
         // user location showed
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
@@ -214,15 +216,49 @@ public class MapsActivity extends FragmentActivity
 
     }
 
+    private String markerName;
+
     @Override
-    public void onMapLongClick(LatLng latLng)
+    public void onMapLongClick(final LatLng latLng)
     {
-        markers.add(
-                mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("Your tent")
-                .snippet("Tap and hold to delete pin")
-                .draggable(true)));
+        markerName = "";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New pin name:");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                markerName = input.getText().toString();
+
+
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+
+        markers.add(mMap.addMarker(
+                new MarkerOptions()
+                        .position(latLng)
+                        .title(markerName)
+                        .snippet("Tap and hold to delete pin")
+                        .draggable(true)));
+        markerName = "";
 
         for (int i = 0; i < markers.size(); i++)
         {
@@ -250,7 +286,9 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowLongClick(Marker marker)
     {
+        //
         marker.remove();
+//        marker.setTitle();
         Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
     }
