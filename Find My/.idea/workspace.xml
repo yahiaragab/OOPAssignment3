@@ -32,13 +32,13 @@
       <file leaf-file-name="MapsActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4851752">
-              <caret line="251" column="23" selection-start-line="251" selection-start-column="23" selection-end-line="251" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.8490566">
+              <caret line="266" column="24" selection-start-line="266" selection-start-column="24" selection-end-line="266" selection-end-column="24" />
               <folding>
-                <element signature="e#8649#8862#0" expanded="true" />
-                <element signature="e#8861#8862#0" expanded="true" />
-                <element signature="e#8910#9097#0" expanded="true" />
-                <element signature="e#9096#9097#0" expanded="true" />
+                <element signature="e#8793#9166#0" expanded="true" />
+                <element signature="e#9165#9166#0" expanded="true" />
+                <element signature="e#9214#9401#0" expanded="true" />
+                <element signature="e#9400#9401#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2309,13 +2309,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4851752">
-          <caret line="251" column="23" selection-start-line="251" selection-start-column="23" selection-end-line="251" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.8490566">
+          <caret line="266" column="24" selection-start-line="266" selection-start-column="24" selection-end-line="266" selection-end-column="24" />
           <folding>
-            <element signature="e#8649#8862#0" expanded="true" />
-            <element signature="e#8861#8862#0" expanded="true" />
-            <element signature="e#8910#9097#0" expanded="true" />
-            <element signature="e#9096#9097#0" expanded="true" />
+            <element signature="e#8793#9166#0" expanded="true" />
+            <element signature="e#9165#9166#0" expanded="true" />
+            <element signature="e#9214#9401#0" expanded="true" />
+            <element signature="e#9400#9401#0" expanded="true" />
           </folding>
         </state>
       </provider>

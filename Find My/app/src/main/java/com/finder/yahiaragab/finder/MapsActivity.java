@@ -217,7 +217,7 @@ public class MapsActivity extends FragmentActivity
     }
 
     private String markerName;
-
+    int pinNum = 1;
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
@@ -228,8 +228,9 @@ public class MapsActivity extends FragmentActivity
 
         // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+        // | InputType.TYPE_TEXT_VARIATION_PASSWORD
         builder.setView(input);
 
         // Set up the buttons
@@ -237,6 +238,12 @@ public class MapsActivity extends FragmentActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 markerName = input.getText().toString();
+
+                if (markerName.equals(""))
+                {
+                    markerName = "Pin " + pinNum;
+                    pinNum++;
+                }
 
 
             }
@@ -251,7 +258,6 @@ public class MapsActivity extends FragmentActivity
 
         builder.show();
 
-
         markers.add(mMap.addMarker(
                 new MarkerOptions()
                         .position(latLng)
@@ -259,6 +265,12 @@ public class MapsActivity extends FragmentActivity
                         .snippet("Tap and hold to delete pin")
                         .draggable(true)));
         markerName = "";
+//        markers.add(
+//                mMap.addMarker(new MarkerOptions()
+//                        .position(latLng)
+//                        .title(markerName)
+//                        .snippet("Tap and hold to delete pin")
+//                        .draggable(true)));
 
         for (int i = 0; i < markers.size(); i++)
         {
