@@ -54,7 +54,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
-        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener {
+        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener, OnMarkerDragListener {
 
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -101,6 +101,7 @@ public class MapsActivity extends FragmentActivity
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
+        mMap.setOnMarkerDragListener(this);
 
 
         // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
@@ -133,8 +134,6 @@ public class MapsActivity extends FragmentActivity
 //                    Toast.LENGTH_SHORT).show();
 //
 //        }
-
-
     }
 
 
@@ -255,10 +254,18 @@ public class MapsActivity extends FragmentActivity
         builder.show();
 
 
-        for (int i = 0; i < markers.size(); i++)
+        System.out.print("-------Sorted: ");
+        for (int j = 0; j < markers.size(); j++)    // Start with 1 (not 0)
         {
-            System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
+
+            System.out.print(j + " " + markers.get(j).getId() + ", ");
         }
+        System.out.print("\n");
+
+//        if (markers.size() > 0) {
+//            sortMarkers(markers.get(markers.size() - 1));
+//        }
+
 
     }
 
@@ -266,6 +273,8 @@ public class MapsActivity extends FragmentActivity
     @Override
     public boolean onMarkerClick(Marker marker)
     {
+        //HOW TO FIND OUT WHICH MARKER LINE IS CONNECTED TO
+
         DecimalFormat df = new DecimalFormat("#.0");
 
         if (line != null)
@@ -278,7 +287,7 @@ public class MapsActivity extends FragmentActivity
         distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
         System.out.println("Distance between two points is " + distanceInMeters);
 
-        line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(marker.getPosition())
+        line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(markers.get(markers.indexOf(marker)).getPosition())
                 .color(Color.BLUE).width(15));
 
         Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.",
@@ -300,8 +309,57 @@ public class MapsActivity extends FragmentActivity
         //if the user deletes the pin the line is on, delete the line
 
         marker.remove();
+        markers.remove(markers.indexOf(marker));
 //        marker.setTitle();
         Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
+
+    }
+
+    //Thought we need to sort, but it's sorted ascendingly already
+//
+//    public void sortMarkers(Marker newMrkr)
+//    {
+//        int j=0;                     // the number of items sorted so far
+//                        // the item to be inserted
+//        int i= 0;
+//
+//        for (j = 1; j < markers.size(); j++)    // Start with 1 (not 0)
+//        {
+//            newMrkr = markers.get(j);
+//            // Smaller values are moving up
+//            for(i = j - 1;
+//                (i >= 0) && ( markers.get(i).getId().compareTo( newMrkr.getId() ) ) < 10 ;
+//                i--)
+//            {
+//                markers.set(i + 1, markers.get(i));
+//            }
+//            markers.set(i+1, newMrkr);    // Put the key in its proper location
+//        }
+//
+//        System.out.print("-------Sorted: ");
+//        for (j = 0; j < markers.size(); j++)    // Start with 1 (not 0)
+//        {
+//
+//            System.out.print(markers.get(j).getId() + ", ");
+//        }
+//        System.out.print("\n");
+//
+//    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker)
+    {
+
     }
 }

@@ -6,8 +6,9 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="dist" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="Sort" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_REGEXP_FILTER" value="false" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="728cd013-5449-47db-a6af-1e9ee98dc614" name="Default" comment="" />
@@ -33,14 +34,13 @@
       <file leaf-file-name="MapsActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7574124">
-              <caret line="284" column="43" selection-start-line="284" selection-start-column="43" selection-end-line="284" selection-end-column="43" />
+            <state vertical-scroll-proportion="0.6469003">
+              <caret line="262" column="16" selection-start-line="262" selection-start-column="16" selection-end-line="262" selection-end-column="16" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#8251#8952#0" expanded="true" />
-                <element signature="e#8951#8952#0" expanded="true" />
-                <element signature="e#9000#9187#0" expanded="true" />
-                <element signature="e#9186#9187#0" expanded="true" />
+                <element signature="e#8315#9016#0" expanded="true" />
+                <element signature="e#9015#9016#0" expanded="true" />
+                <element signature="e#9064#9251#0" expanded="true" />
+                <element signature="e#9250#9251#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2354,14 +2354,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7574124">
-          <caret line="284" column="43" selection-start-line="284" selection-start-column="43" selection-end-line="284" selection-end-column="43" />
+        <state vertical-scroll-proportion="0.6469003">
+          <caret line="262" column="16" selection-start-line="262" selection-start-column="16" selection-end-line="262" selection-end-column="16" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#8251#8952#0" expanded="true" />
-            <element signature="e#8951#8952#0" expanded="true" />
-            <element signature="e#9000#9187#0" expanded="true" />
-            <element signature="e#9186#9187#0" expanded="true" />
+            <element signature="e#8315#9016#0" expanded="true" />
+            <element signature="e#9015#9016#0" expanded="true" />
+            <element signature="e#9064#9251#0" expanded="true" />
+            <element signature="e#9250#9251#0" expanded="true" />
           </folding>
         </state>
       </provider>
