@@ -265,6 +265,11 @@ public class MapsActivity extends FragmentActivity
     @Override
     public boolean onMarkerClick(Marker marker)
     {
+        if (line != null)
+        {
+            line.remove();
+        }
+
         marker.showInfoWindow();
 
         distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
