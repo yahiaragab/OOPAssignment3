@@ -245,7 +245,13 @@ public class MapsActivity extends FragmentActivity
                     pinNum++;
                 }
 
-
+                markers.add(mMap.addMarker(
+                        new MarkerOptions()
+                                .position(latLng)
+                                .title(markerName)
+                                .snippet("Tap and hold to delete pin")
+                                .draggable(true)));
+                markerName = "";
             }
         });
 
@@ -258,13 +264,6 @@ public class MapsActivity extends FragmentActivity
 
         builder.show();
 
-        markers.add(mMap.addMarker(
-                new MarkerOptions()
-                        .position(latLng)
-                        .title(markerName)
-                        .snippet("Tap and hold to delete pin")
-                        .draggable(true)));
-        markerName = "";
 //        markers.add(
 //                mMap.addMarker(new MarkerOptions()
 //                        .position(latLng)
