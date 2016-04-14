@@ -80,7 +80,7 @@ public class MapsActivity extends FragmentActivity
 
         // HERES THE BUTTON CODE
         Button button = new Button(this);
-        button.setText("Click me");
+        button.setText("Drop Pin Here");
         addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +90,7 @@ public class MapsActivity extends FragmentActivity
             @Override
             public void onClick(View v)
             {
-
+                addMarker(userLatLng);
 
 
             }
