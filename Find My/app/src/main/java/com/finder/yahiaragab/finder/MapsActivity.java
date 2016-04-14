@@ -116,7 +116,7 @@ public class MapsActivity extends FragmentActivity
 
         userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 
-
+        mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
@@ -220,7 +220,7 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapClick(LatLng latLng)
     {
-
+        line.remove();
     }
 
 
@@ -299,7 +299,7 @@ public class MapsActivity extends FragmentActivity
     {
         //HOW TO FIND OUT WHICH MARKER LINE IS CONNECTED TO
 
-        DecimalFormat df = new DecimalFormat("#.0");
+        DecimalFormat df = new DecimalFormat("#0.0");
 
         if (line != null)
         {
@@ -319,11 +319,15 @@ public class MapsActivity extends FragmentActivity
         return true;
     }
 
+    Marker destMarker;
+
     public void drawLine(Marker marker)
     {
+        destMarker = null;
         line = mMap.addPolyline(new PolylineOptions()
                 .add(userLatLng).add(markers.get(markers.indexOf(marker)).getPosition())
                 .color(Color.BLUE).width(15));
+        destMarker = marker;
     }
 
     @Override
@@ -331,6 +335,7 @@ public class MapsActivity extends FragmentActivity
     {
         //get directions to this marker
     }
+
 
     @Override
     public void onInfoWindowLongClick(Marker marker)
@@ -342,6 +347,12 @@ public class MapsActivity extends FragmentActivity
 //        marker.setTitle();
         Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
+
+        if ( markers.indexOf(marker) == markers.indexOf(destMarker) )
+        {
+            line.remove();
+        }
+
 
     }
 

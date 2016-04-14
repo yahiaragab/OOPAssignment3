@@ -34,16 +34,18 @@
       <file leaf-file-name="MapsActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6361186">
-              <caret line="323" column="16" selection-start-line="323" selection-start-column="16" selection-end-line="323" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.5956873">
+              <caret line="350" column="27" selection-start-line="350" selection-start-column="27" selection-end-line="350" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3335#3576#0" expanded="true" />
                 <element signature="e#3575#3576#0" expanded="true" />
-                <element signature="e#9015#9716#0" expanded="true" />
-                <element signature="e#9715#9716#0" expanded="true" />
-                <element signature="e#9764#9951#0" expanded="true" />
-                <element signature="e#9950#9951#0" expanded="true" />
+                <element signature="e#8378#8379#0" expanded="true" />
+                <element signature="e#8407#8408#0" expanded="true" />
+                <element signature="e#9078#9779#0" expanded="true" />
+                <element signature="e#9778#9779#0" expanded="true" />
+                <element signature="e#9827#10014#0" expanded="true" />
+                <element signature="e#10013#10014#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,8 +55,13 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSTracker.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
-              <folding />
+              <caret line="168" column="42" selection-start-line="168" selection-start-column="42" selection-end-line="168" selection-end-column="42" />
+              <folding>
+                <element signature="e#3953#3954#0" expanded="true" />
+                <element signature="e#3995#3996#0" expanded="true" />
+                <element signature="e#4309#4609#0" expanded="true" />
+                <element signature="e#4608#4609#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -2208,7 +2215,7 @@
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="true" />
       <option name="PREFERRED_AVD" value="" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
       <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
@@ -2339,14 +2346,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2363,18 +2362,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSTracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="168" column="42" selection-start-line="168" selection-start-column="42" selection-end-line="168" selection-end-column="42" />
+          <folding>
+            <element signature="e#3953#3954#0" expanded="true" />
+            <element signature="e#3995#3996#0" expanded="true" />
+            <element signature="e#4309#4609#0" expanded="true" />
+            <element signature="e#4608#4609#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6361186">
-          <caret line="323" column="16" selection-start-line="323" selection-start-column="16" selection-end-line="323" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.5956873">
+          <caret line="350" column="27" selection-start-line="350" selection-start-column="27" selection-end-line="350" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3335#3576#0" expanded="true" />
             <element signature="e#3575#3576#0" expanded="true" />
-            <element signature="e#9015#9716#0" expanded="true" />
-            <element signature="e#9715#9716#0" expanded="true" />
-            <element signature="e#9764#9951#0" expanded="true" />
-            <element signature="e#9950#9951#0" expanded="true" />
+            <element signature="e#8378#8379#0" expanded="true" />
+            <element signature="e#8407#8408#0" expanded="true" />
+            <element signature="e#9078#9779#0" expanded="true" />
+            <element signature="e#9778#9779#0" expanded="true" />
+            <element signature="e#9827#10014#0" expanded="true" />
+            <element signature="e#10013#10014#0" expanded="true" />
           </folding>
         </state>
       </provider>

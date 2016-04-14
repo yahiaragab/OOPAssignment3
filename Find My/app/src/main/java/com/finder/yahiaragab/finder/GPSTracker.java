@@ -32,7 +32,7 @@ public class GPSTracker extends Service implements LocationListener
     double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60;
 
     protected LocationManager locationManager;
 
@@ -130,11 +130,13 @@ public class GPSTracker extends Service implements LocationListener
         return longitude;
     }
 
-    public boolean canGetLocation() {
+    public boolean canGetLocation()
+    {
         return this.canGetLocation;
     }
 
-    public void showSettingsAlert() {
+    public void showSettingsAlert()
+    {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
         alertDialog.setTitle("GPS is settings");
@@ -144,7 +146,8 @@ public class GPSTracker extends Service implements LocationListener
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 context.startActivity(intent);
             }
