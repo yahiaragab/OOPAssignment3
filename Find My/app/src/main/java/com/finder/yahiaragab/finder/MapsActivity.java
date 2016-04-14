@@ -81,7 +81,8 @@ public class MapsActivity extends FragmentActivity
         // HERES THE BUTTON CODE
         Button button = new Button(this);
         button.setText("Drop Pin Here");
-        addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
+        addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                RadioGroup.LayoutParams.WRAP_CONTENT));
 
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -91,7 +92,6 @@ public class MapsActivity extends FragmentActivity
             public void onClick(View v)
             {
                 addMarker(userLatLng);
-
 
             }
 
@@ -311,8 +311,7 @@ public class MapsActivity extends FragmentActivity
         distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
         System.out.println("Distance between two points is " + distanceInMeters);
 
-        line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(markers.get(markers.indexOf(marker)).getPosition())
-                .color(Color.BLUE).width(15));
+        drawLine(marker);
 
         Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.",
                 Toast.LENGTH_SHORT).show();
@@ -320,6 +319,12 @@ public class MapsActivity extends FragmentActivity
         return true;
     }
 
+    public void drawLine(Marker marker)
+    {
+        line = mMap.addPolyline(new PolylineOptions()
+                .add(userLatLng).add(markers.get(markers.indexOf(marker)).getPosition())
+                .color(Color.BLUE).width(15));
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker)
