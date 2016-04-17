@@ -22,6 +22,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     GPSOpenHelper(Context context) {
         super(context, GPSDataTableInfo.DATABASE_NAME, null, GPSDataTableInfo.DATABASE_VERSION);
+        getWritableDatabase();
         Log.d("GPSOpenHelper", "Database Created");
     }
 
@@ -29,6 +30,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(MARKER_TABLE_CREATE);
         Log.d("GPSOpenHelper", "Table Created");
+        System.out.print("Table created");
     }
 
     @Override
@@ -51,9 +53,9 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     }
 
-    public void insertLatlng(GPSOpenHelper goh, LatLng latLng)
+    public void insertLatlng(GPSOpenHelper db, LatLng latLng)
     {
-        SQLiteDatabase SQDB = goh.getWritableDatabase();
+        SQLiteDatabase SQDB = db.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(GPSDataTableInfo.MARKER_LATITUDE, latLng.latitude );

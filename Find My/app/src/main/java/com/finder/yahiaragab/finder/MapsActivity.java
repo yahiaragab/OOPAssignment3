@@ -300,14 +300,16 @@ public class MapsActivity extends FragmentActivity
                     pinNum++;
                 }
 
-                mMap.addMarker(
+                markers.add(mMap.addMarker(
                         new MarkerOptions()
                                 .position(latLng)
                                 .title(markerName)
                                 .snippet("Tap and hold to delete pin")
-                                .draggable(true));
+                                .draggable(true)));
                 markerName = "";
+
                 insertLatlng(latLng);
+
             }
         });
 
