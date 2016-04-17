@@ -16,11 +16,18 @@ public final class GPSData {
         // This class cannot be instantiated
         private GPSPoint() {}
 
-
+        public static final String MARKER_TABLE_NAME = "marker";
         public static final String LONGITUDE = "longitude";
         public static final String LATITUDE = "latitude";
         public static final String TIME = "time";
-        public static final String TABLE_NAME = "time";
+
+        private static final String MARKER_TABLE_CREATE =
+                "CREATE TABLE " + MARKER_TABLE_NAME + " (" +
+                        LATITUDE + " REAL " +
+                        LONGITUDE + " REAL " +
+                        TIME + " TIME " +
+                        ");";
+
 
 //        /**
 //         * The content:// style URL for this table
