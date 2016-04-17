@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Bitmap;
@@ -236,6 +237,18 @@ public class MapsActivity extends FragmentActivity
         if (line != null) {
             line.remove();
         }
+
+        GPSOpenHelper goh = new GPSOpenHelper(ctx);
+        Cursor cr = goh.getLatlng(goh);
+        //move ptr to first row
+        cr.moveToFirst();
+
+//        System.out.println("LAT: ");
+//        do
+//        {
+//            System.out.println(cr.getString(0) + " YOYOY\nLONG: " + cr.getString(1));
+//        }
+//        while (cr.moveToNext());
     }
 
 
@@ -324,10 +337,11 @@ public class MapsActivity extends FragmentActivity
 
     }
 
+
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-        //HOW TO FIND OUT WHICH MARKER LINE IS CONNECTED TO
+//        distanceInMeters = 100;
 
         DecimalFormat df = new DecimalFormat("#0.0");
 
@@ -439,9 +453,16 @@ public class MapsActivity extends FragmentActivity
     public void onLocationChanged(Location location)
     {
         gps.location = location;
-        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+//        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+//        line.remove();
+//        drawLine(ll, destMarker);
+
+        userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
+
         line.remove();
-        drawLine(ll, destMarker);
+        drawLine(userLatLng, destMarker);
+
+
     }
 
     @Override

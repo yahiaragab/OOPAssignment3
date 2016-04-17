@@ -2,6 +2,7 @@ package com.finder.yahiaragab.finder;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
@@ -15,12 +16,13 @@ public class GPSOpenHelper extends SQLiteOpenHelper
     private static final String MARKER_TABLE_CREATE =
             "CREATE TABLE " + GPSDataTableInfo.MARKER_TABLE_NAME + " (" +
 //                    GPSDataTableInfo.MARKER_USER_ID + " NUMBER(10) PRIMARY KEY " +
-                    GPSDataTableInfo.MARKER_LATITUDE + " REAL " +
+                    GPSDataTableInfo.MARKER_LATITUDE + " REAL, " +
                     GPSDataTableInfo.MARKER_LONGITUDE + " REAL " +
 //                    GPSDataTableInfo.MARKER_TIME + " TIME " +
                     ");";
 
-    GPSOpenHelper(Context context) {
+    GPSOpenHelper(Context context)
+    {
         super(context, GPSDataTableInfo.DATABASE_NAME, null, GPSDataTableInfo.DATABASE_VERSION);
         getWritableDatabase();
         Log.d("GPSOpenHelper", "Database Created");
@@ -55,15 +57,51 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     public void insertLatlng(GPSOpenHelper db, LatLng latLng)
     {
-        SQLiteDatabase SQDB = db.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        boolean res = false;
+        try {
+            SQLiteDatabase SQDB = db.getWritableDatabase();
+            ContentValues cv = new ContentValues();
 
-        cv.put(GPSDataTableInfo.MARKER_LATITUDE, latLng.latitude );
-        cv.put(GPSDataTableInfo.MARKER_LONGITUDE, latLng.longitude );
+            cv.put(GPSDataTableInfo.MARKER_LATITUDE, latLng.latitude);
+            cv.put(GPSDataTableInfo.MARKER_LONGITUDE, latLng.longitude);
 
-        long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
+            long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
 
-        Log.d("GPSOpenHelper", "One row inserted");
+            Log.d("GPSOpenHelper", "One row inserted");
+            res = true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            res = false;
+        }
+
+        if (res)
+        {
+            System.out.println("hunda db write success");
+        }
+        else
+        {
+            System.out.println("hunda db write fail");
+        }
 
     }
+
+
+    //retrieving info
+    public Cursor getLatlng(GPSOpenHelper db)
+    {
+        SQLiteDatabase sqdb = db.getReadableDatabase();
+        String[] columns =
+                {
+                        GPSDataTableInfo.MARKER_LATITUDE,
+                        GPSDataTableInfo.MARKER_LONGITUDE
+                };
+        Cursor cr = sqdb.query(GPSDataTableInfo.MARKER_TABLE_NAME, columns,
+                null, null, null, null, null);
+        return cr;
+    }
+
+
+
 }
