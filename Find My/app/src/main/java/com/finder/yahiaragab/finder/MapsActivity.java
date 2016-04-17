@@ -58,7 +58,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
+import com.finder.yahiaragab.finder.GPSOpenHelper;
+import com.finder.yahiaragab.finder.GPSData.*;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
@@ -242,8 +243,13 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
+        Marker marker;
+
+        marker = addMarker(latLng);
+
         GPSOpenHelper db = new GPSOpenHelper(ctx);
-        addMarker(latLng);
+        db.insertLatlng(db, latLng);
+
 
 //        Location loc = new Location("Marker");
 //        loc.setLatitude(latLng.latitude);
@@ -267,7 +273,7 @@ public class MapsActivity extends FragmentActivity
     int pinNum = 1;
     double distanceInMeters= 0;
 
-    public void addMarker(final LatLng latLng)
+    public Marker addMarker(final LatLng latLng)
     {
         markerName = "";
 
@@ -310,7 +316,7 @@ public class MapsActivity extends FragmentActivity
 
         builder.show();
 
-
+        return markers.get( markers.size()-1 );
 
     }
 

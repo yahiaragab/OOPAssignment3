@@ -14,10 +14,10 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 {
     private static final String MARKER_TABLE_CREATE =
             "CREATE TABLE " + GPSDataTableInfo.MARKER_TABLE_NAME + " (" +
-                    GPSDataTableInfo.MARKER_USER_ID + " NUMBER(10) PRIMARY KEY " +
+//                    GPSDataTableInfo.MARKER_USER_ID + " NUMBER(10) PRIMARY KEY " +
                     GPSDataTableInfo.MARKER_LATITUDE + " REAL " +
                     GPSDataTableInfo.MARKER_LONGITUDE + " REAL " +
-                    GPSDataTableInfo.MARKER_TIME + " TIME " +
+//                    GPSDataTableInfo.MARKER_TIME + " TIME " +
                     ");";
 
     GPSOpenHelper(Context context) {
@@ -36,12 +36,11 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     }
 
-    public void insertInfo(GPSOpenHelper goh, String userID, Location loc)
+    public void insertLocation(GPSOpenHelper goh, Location loc)
     {
         SQLiteDatabase SQDB = goh.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-//        cv.put(GPSDataTableInfo.MARKER_USER_ID, userID);
         cv.put(GPSDataTableInfo.MARKER_LATITUDE, loc.getLatitude() );
         cv.put(GPSDataTableInfo.MARKER_LONGITUDE, loc.getLongitude() );
         cv.put(GPSDataTableInfo.MARKER_TIME, loc.getTime());
@@ -49,6 +48,20 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
 
         Log.d("GPSOpenHelper", "Onr row inserted");
+
+    }
+
+    public void insertLatlng(GPSOpenHelper goh, LatLng latLng)
+    {
+        SQLiteDatabase SQDB = goh.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(GPSDataTableInfo.MARKER_LATITUDE, latLng.latitude );
+        cv.put(GPSDataTableInfo.MARKER_LONGITUDE, latLng.longitude );
+
+        long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
+
+        Log.d("GPSOpenHelper", "One row inserted");
 
     }
 }
