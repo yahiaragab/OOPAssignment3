@@ -54,6 +54,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
@@ -68,12 +70,12 @@ public class MapsActivity extends FragmentActivity
         OnMarkerDragListener, LocationListener {
 
     GPSOpenHelper db;
-    private GoogleMap mMap;
-    private ArrayList<Marker> markers = new ArrayList<Marker>();
+    private static GoogleMap mMap;
+    private static ArrayList<Marker> markers = new ArrayList<Marker>();
     private GoogleApiClient client;
     GPSTracker gps;
-    LatLng userLatLng;
-    Polyline line;
+    public static LatLng userLatLng;
+    public static Polyline line;
     Context ctx = this;
 
     @Override
@@ -365,14 +367,17 @@ public class MapsActivity extends FragmentActivity
         return true;
     }
 
-    Marker destMarker;
+    public static Marker destMarker;
 
-    public void drawLine(LatLng latLng, Marker marker)
+    public static void drawLine(LatLng latLng, Marker marker)
     {
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
         destMarker = null;
         line = mMap.addPolyline(new PolylineOptions()
                 .add(latLng).add(markers.get(markers.indexOf(marker)).getPosition())
-                .color(Color.BLUE).width(15));
+                .color(color).width(15));
         destMarker = marker;
     }
 
@@ -452,6 +457,8 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onLocationChanged(Location location)
     {
+        line.remove();
+        System.out.println("YOYOYOYO LINE'S GONE");
         gps.location = location;
 //        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
 //        line.remove();
@@ -459,7 +466,7 @@ public class MapsActivity extends FragmentActivity
 
         userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
 
-        line.remove();
+
         drawLine(userLatLng, destMarker);
 
 
