@@ -243,12 +243,7 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
-        Marker marker;
-
-        marker = addMarker(latLng);
-
-        GPSOpenHelper db = new GPSOpenHelper(ctx);
-        db.insertLatlng(db, latLng);
+        addMarker(latLng);
 
 
 //        Location loc = new Location("Marker");
@@ -269,11 +264,19 @@ public class MapsActivity extends FragmentActivity
 //        }
     }
 
+    public void insertLatlng(LatLng latLng)
+    {
+        GPSOpenHelper db = new GPSOpenHelper(ctx);
+        db.insertLatlng(db, latLng);
+        Toast.makeText(getBaseContext(), "Marker added to db", Toast.LENGTH_LONG).show();
+
+    }
+
     private String markerName;
-    int pinNum = 1;
+    int pinNum = 0;
     double distanceInMeters= 0;
 
-    public Marker addMarker(final LatLng latLng)
+    public void addMarker(final LatLng latLng)
     {
         markerName = "";
 
@@ -293,17 +296,18 @@ public class MapsActivity extends FragmentActivity
                 markerName = input.getText().toString();
 
                 if (markerName.equals("")) {
-                    markerName = "Pin " + pinNum;
+                    markerName = "Pin " + (pinNum+1);
                     pinNum++;
                 }
 
-                markers.add(mMap.addMarker(
+                mMap.addMarker(
                         new MarkerOptions()
                                 .position(latLng)
                                 .title(markerName)
                                 .snippet("Tap and hold to delete pin")
-                                .draggable(true)));
+                                .draggable(true));
                 markerName = "";
+                insertLatlng(latLng);
             }
         });
 
@@ -315,8 +319,6 @@ public class MapsActivity extends FragmentActivity
         });
 
         builder.show();
-
-        return markers.get( markers.size()-1 );
 
     }
 
