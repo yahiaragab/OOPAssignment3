@@ -17,8 +17,11 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
-public class GPSTracker extends Service implements LocationListener
+
+public class GPSTracker extends Service implements LocationListener, GoogleMap.OnMapLongClickListener
 {
     private final Context context;
 
@@ -32,7 +35,7 @@ public class GPSTracker extends Service implements LocationListener
     double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 10;
 
     protected LocationManager locationManager;
 
@@ -60,7 +63,8 @@ public class GPSTracker extends Service implements LocationListener
             {
                 this.canGetLocation = true;
 
-                if (isNetworkEnabled) {
+                if (isNetworkEnabled)
+                {
 
                     locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
@@ -165,9 +169,9 @@ public class GPSTracker extends Service implements LocationListener
     }
 
     @Override
-    public void onLocationChanged(Location arg0) {
+    public void onLocationChanged(Location location) {
         // TODO Auto-generated method stub
-
+        this.location = location;
     }
 
     @Override
@@ -195,4 +199,8 @@ public class GPSTracker extends Service implements LocationListener
     }
 
 
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+    }
 }

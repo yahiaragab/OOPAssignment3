@@ -2,6 +2,7 @@ package com.finder.yahiaragab.finder;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -11,11 +12,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -56,7 +60,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
-        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener, OnMarkerDragListener {
+        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener,
+        OnMarkerDragListener, LocationListener {
 
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -96,6 +101,7 @@ public class MapsActivity extends FragmentActivity
             }
 
         });
+
     }
 
 
@@ -114,7 +120,7 @@ public class MapsActivity extends FragmentActivity
 
         gps = new GPSTracker(MapsActivity.this);
 
-        userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+        userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
 
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
@@ -123,6 +129,9 @@ public class MapsActivity extends FragmentActivity
         mMap.setOnInfoWindowLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
 
+//        mMap.getUiSettings().setCompassEnabled(true);
+//        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        mMap.getUiSettings().setRotateGesturesEnabled(true);
 
         // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
         float zoomlevel = 15;
@@ -220,7 +229,9 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapClick(LatLng latLng)
     {
-        line.remove();
+        if (line != null) {
+            line.remove();
+        }
     }
 
 
@@ -228,8 +239,23 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
+        Location loc = new Location("Marker");
+        loc.setLatitude(latLng.latitude);
+        loc.setLongitude(latLng.longitude);
         addMarker(latLng);
 
+        Log.e("GPSDataContentProvider", loc.toString());
+
+        ContentValues values = new ContentValues();
+
+        values.put(GPSData.GPSPoint.LONGITUDE, loc.getLongitude());
+        values.put(GPSData.GPSPoint.LATITUDE, loc.getLatitude());
+        values.put(GPSData.GPSPoint.TIME, loc.getTime());
+        getContentResolver().insert(GPSDataContentProvider.CONTENT_URI, values);
+        if (values != null)
+        {
+            System.out.println("YEEEEEEEEEES");
+        }
     }
 
     private String markerName;
@@ -280,17 +306,6 @@ public class MapsActivity extends FragmentActivity
         builder.show();
 
 
-        System.out.print("-------Sorted: ");
-        for (int j = 0; j < markers.size(); j++)    // Start with 1 (not 0)
-        {
-
-            System.out.print(j + " " + markers.get(j).getId() + ", ");
-        }
-        System.out.print("\n");
-
-//        if (markers.size() > 0) {
-//            sortMarkers(markers.get(markers.size() - 1));
-//        }
 
     }
 
@@ -308,10 +323,12 @@ public class MapsActivity extends FragmentActivity
 
         marker.showInfoWindow();
 
+        userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
+
         distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
         System.out.println("Distance between two points is " + distanceInMeters);
 
-        drawLine(marker);
+        drawLine(userLatLng, marker);
 
         Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.",
                 Toast.LENGTH_SHORT).show();
@@ -321,11 +338,11 @@ public class MapsActivity extends FragmentActivity
 
     Marker destMarker;
 
-    public void drawLine(Marker marker)
+    public void drawLine(LatLng latLng, Marker marker)
     {
         destMarker = null;
         line = mMap.addPolyline(new PolylineOptions()
-                .add(userLatLng).add(markers.get(markers.indexOf(marker)).getPosition())
+                .add(latLng).add(markers.get(markers.indexOf(marker)).getPosition())
                 .color(Color.BLUE).width(15));
         destMarker = marker;
     }
@@ -400,6 +417,30 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMarkerDragEnd(Marker marker)
     {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        gps.location = location;
+        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+        line.remove();
+        drawLine(ll, destMarker);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }
