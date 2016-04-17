@@ -67,7 +67,7 @@ import com.finder.yahiaragab.finder.GPSData.*;
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
         OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener,
-        OnMarkerDragListener, LocationListener {
+        OnMarkerDragListener {
 
     GPSOpenHelper db;
     private static GoogleMap mMap;
@@ -384,7 +384,7 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-        //get directions to this marker
+
     }
 
 
@@ -407,83 +407,25 @@ public class MapsActivity extends FragmentActivity
 
     }
 
-    //Thought we need to sort, but it's sorted ascendingly already
-//
-//    public void sortMarkers(Marker newMrkr)
-//    {
-//        int j=0;                     // the number of items sorted so far
-//                        // the item to be inserted
-//        int i= 0;
-//
-//        for (j = 1; j < markers.size(); j++)    // Start with 1 (not 0)
-//        {
-//            newMrkr = markers.get(j);
-//            // Smaller values are moving up
-//            for(i = j - 1;
-//                (i >= 0) && ( markers.get(i).getId().compareTo( newMrkr.getId() ) ) < 10 ;
-//                i--)
-//            {
-//                markers.set(i + 1, markers.get(i));
-//            }
-//            markers.set(i+1, newMrkr);    // Put the key in its proper location
-//        }
-//
-//        System.out.print("-------Sorted: ");
-//        for (j = 0; j < markers.size(); j++)    // Start with 1 (not 0)
-//        {
-//
-//            System.out.print(markers.get(j).getId() + ", ");
-//        }
-//        System.out.print("\n");
-//
-//    }
-
     @Override
     public void onMarkerDragStart(Marker marker) {
 
     }
 
     @Override
-    public void onMarkerDrag(Marker marker) {
+    public void onMarkerDrag(Marker marker)
+    {
 
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker)
     {
-
+        markers.get(markers.indexOf(marker)).setPosition(marker.getPosition());
+        Toast.makeText(ctx,
+                "Destination changed to: " + markers.indexOf(marker),
+                Toast.LENGTH_SHORT).show();
+        destMarker = marker;
     }
 
-    @Override
-    public void onLocationChanged(Location location)
-    {
-        line.remove();
-        System.out.println("YOYOYOYO LINE'S GONE");
-        gps.location = location;
-//        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-//        line.remove();
-//        drawLine(ll, destMarker);
-
-        userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
-
-
-        drawLine(userLatLng, destMarker);
-
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

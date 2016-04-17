@@ -24,7 +24,6 @@ public class GPSOpenHelper extends SQLiteOpenHelper
     GPSOpenHelper(Context context)
     {
         super(context, GPSDataTableInfo.DATABASE_NAME, null, GPSDataTableInfo.DATABASE_VERSION);
-        getWritableDatabase();
         Log.d("GPSOpenHelper", "Database Created");
     }
 

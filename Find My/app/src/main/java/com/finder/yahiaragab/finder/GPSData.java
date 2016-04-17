@@ -1,6 +1,5 @@
 package com.finder.yahiaragab.finder;
 
-import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class GPSData
