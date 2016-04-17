@@ -3,7 +3,8 @@ package com.finder.yahiaragab.finder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public final class GPSData {
+public final class GPSData
+{
     public static final String AUTHORITY = "com.finder.yahiaragab.finder";
 
     // This class cannot be instantiated
@@ -12,21 +13,20 @@ public final class GPSData {
     /**
      * GPS data table
      */
-    public static final class GPSPoint implements BaseColumns {
+    public static abstract class GPSDataTableInfo implements BaseColumns
+    {
         // This class cannot be instantiated
-        private GPSPoint() {}
+        private GPSDataTableInfo() {}
 
+        public static final String DATABASE_NAME = "TrackMeBack";
+        public static final int DATABASE_VERSION = 1;
+
+        public static final String MARKER_USER_ID = "userID";
         public static final String MARKER_TABLE_NAME = "marker";
-        public static final String LONGITUDE = "longitude";
-        public static final String LATITUDE = "latitude";
-        public static final String TIME = "time";
+        public static final String MARKER_LONGITUDE = "longitude";
+        public static final String MARKER_LATITUDE = "latitude";
+        public static final String MARKER_TIME = "time";
 
-        private static final String MARKER_TABLE_CREATE =
-                "CREATE TABLE " + MARKER_TABLE_NAME + " (" +
-                        LATITUDE + " REAL " +
-                        LONGITUDE + " REAL " +
-                        TIME + " TIME " +
-                        ");";
 
 
 //        /**

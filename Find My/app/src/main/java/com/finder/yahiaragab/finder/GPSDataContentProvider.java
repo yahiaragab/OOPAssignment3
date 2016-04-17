@@ -18,9 +18,14 @@ public class GPSDataContentProvider extends ContentProvider {
 
     private static final String DATABASE_NAME = "gpsdata.db";
     private static final int DATABASE_VERSION = 1;
-    private static final String POINT_TABLE_NAME = "gpspoints";
+    public static final String POINT_TABLE_NAME = "marker";
+    public static final String LONGITUDE = "longitude";
+    public static final String LATITUDE = "latitude";
+    public static final String TIME = "time";
+
 
     public static final String AUTHORITY = "com.finder.yahiaragab.finder";
+
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/gpspoint");
 
     /**
@@ -38,12 +43,12 @@ public class GPSDataContentProvider extends ContentProvider {
         public void onCreate(SQLiteDatabase db) {
             try {
                 Log.i(TAG, "Creating table " + POINT_TABLE_NAME);
-                db.execSQL("CREATE TABLE " + POINT_TABLE_NAME + " ("
-                        + GPSData.GPSPoint._ID + " INTEGER PRIMARY KEY,"
-                        + GPSData.GPSPoint.LATITUDE + " REAL,"
-                        + GPSData.GPSPoint.LONGITUDE + " REAL,"
-                        + GPSData.GPSPoint.TIME + " INTEGER"
-                        + ");");
+//                db.execSQL("CREATE TABLE " + POINT_TABLE_NAME + " ("
+//                        + GPSData.GPSPoint._ID + " INTEGER PRIMARY KEY,"
+//                        + GPSData.GPSPoint.LATITUDE + " REAL,"
+//                        + GPSData.GPSPoint.LONGITUDE + " REAL,"
+//                        + GPSData.GPSPoint.TIME + " INTEGER"
+//                        + ");");
             } catch (SQLiteException e) {
                 Log.e(TAG, e.toString());
             }

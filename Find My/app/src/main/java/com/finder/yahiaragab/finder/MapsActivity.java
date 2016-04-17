@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -63,6 +65,7 @@ public class MapsActivity extends FragmentActivity
         OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener,
         OnMarkerDragListener, LocationListener {
 
+    GPSOpenHelper db;
     private GoogleMap mMap;
     private ArrayList<Marker> markers = new ArrayList<Marker>();
     private GoogleApiClient client;
@@ -239,23 +242,24 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
-        Location loc = new Location("Marker");
-        loc.setLatitude(latLng.latitude);
-        loc.setLongitude(latLng.longitude);
+//        Location loc = new Location("Marker");
+//        loc.setLatitude(latLng.latitude);
+//        loc.setLongitude(latLng.longitude);
+
         addMarker(latLng);
 
-        Log.e("GPSDataContentProvider", loc.toString());
-
-        ContentValues values = new ContentValues();
-
-        values.put(GPSData.GPSPoint.LONGITUDE, loc.getLongitude());
-        values.put(GPSData.GPSPoint.LATITUDE, loc.getLatitude());
-        values.put(GPSData.GPSPoint.TIME, loc.getTime());
-        getContentResolver().insert(GPSDataContentProvider.CONTENT_URI, values);
-        if (values != null)
-        {
-            System.out.println("YEEEEEEEEEES");
-        }
+//        Log.e("GPSDataContentProvider", loc.toString());
+//
+//        ContentValues values = new ContentValues();
+//
+//        values.put(GPSData.GPSPoint.LONGITUDE, loc.getLongitude());
+//        values.put(GPSData.GPSPoint.LATITUDE, loc.getLatitude());
+//        values.put(GPSData.GPSPoint.TIME, loc.getTime());
+//        getContentResolver().insert(GPSDataContentProvider.CONTENT_URI, values);
+//        if (values != null)
+//        {
+//            System.out.println("YEEEEEEEEEES");
+//        }
     }
 
     private String markerName;
