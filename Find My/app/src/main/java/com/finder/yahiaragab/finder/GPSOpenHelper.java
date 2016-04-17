@@ -1,11 +1,14 @@
 package com.finder.yahiaragab.finder;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.util.Log;
 
 import com.finder.yahiaragab.finder.GPSData.GPSDataTableInfo;
+import com.google.android.gms.maps.model.LatLng;
 
 public class GPSOpenHelper extends SQLiteOpenHelper
 {
@@ -30,6 +33,22 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    public void insertInfo(GPSOpenHelper goh, String userID, Location loc)
+    {
+        SQLiteDatabase SQDB = goh.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+//        cv.put(GPSDataTableInfo.MARKER_USER_ID, userID);
+        cv.put(GPSDataTableInfo.MARKER_LATITUDE, loc.getLatitude() );
+        cv.put(GPSDataTableInfo.MARKER_LONGITUDE, loc.getLongitude() );
+        cv.put(GPSDataTableInfo.MARKER_TIME, loc.getTime());
+
+        long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
+
+        Log.d("GPSOpenHelper", "Onr row inserted");
 
     }
 }

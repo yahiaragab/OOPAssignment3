@@ -72,7 +72,7 @@ public class MapsActivity extends FragmentActivity
     GPSTracker gps;
     LatLng userLatLng;
     Polyline line;
-
+    Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -242,12 +242,13 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapLongClick(final LatLng latLng)
     {
+        GPSOpenHelper db = new GPSOpenHelper(ctx);
+        addMarker(latLng);
+
 //        Location loc = new Location("Marker");
 //        loc.setLatitude(latLng.latitude);
 //        loc.setLongitude(latLng.longitude);
-
-        addMarker(latLng);
-
+//
 //        Log.e("GPSDataContentProvider", loc.toString());
 //
 //        ContentValues values = new ContentValues();
