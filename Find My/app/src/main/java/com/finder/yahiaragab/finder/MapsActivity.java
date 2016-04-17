@@ -246,11 +246,11 @@ public class MapsActivity extends FragmentActivity
         cr.moveToFirst();
 
 //        System.out.println("LAT: ");
-//        do
-//        {
-//            System.out.println(cr.getString(0) + " YOYOY\nLONG: " + cr.getString(1));
-//        }
-//        while (cr.moveToNext());
+        do
+        {
+            System.out.println("LAT: " + cr.getString(0) + " YOYOY LONG: " + cr.getString(1));
+        }
+        while (cr.moveToNext());
     }
 
 
@@ -311,7 +311,7 @@ public class MapsActivity extends FragmentActivity
                 markerName = input.getText().toString();
 
                 if (markerName.equals("")) {
-                    markerName = "Pin " + (pinNum+1);
+                    markerName = "Pin " + (pinNum + 1);
                     pinNum++;
                 }
 
@@ -322,6 +322,8 @@ public class MapsActivity extends FragmentActivity
                                 .snippet("Tap and hold to delete pin")
                                 .draggable(true)));
                 markerName = "";
+
+                System.out.println("zzzzzz latlng: " + latLng);
 
                 insertLatlng(latLng);
 

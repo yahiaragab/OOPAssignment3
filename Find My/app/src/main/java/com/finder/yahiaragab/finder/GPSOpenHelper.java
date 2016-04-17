@@ -56,8 +56,8 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     public void insertLatlng(GPSOpenHelper db, LatLng latLng)
     {
-        boolean res = false;
-        try {
+//        boolean res = false;
+//        try {
             SQLiteDatabase SQDB = db.getWritableDatabase();
             ContentValues cv = new ContentValues();
 
@@ -66,23 +66,27 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
             long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
 
+            if (ret > -1)
+            {
+                System.out.println("yoyoyo");
+            }
             Log.d("GPSOpenHelper", "One row inserted");
-            res = true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            res = false;
-        }
-
-        if (res)
-        {
-            System.out.println("hunda db write success");
-        }
-        else
-        {
-            System.out.println("hunda db write fail");
-        }
+//            res = true;
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            res = false;
+//        }
+//
+//        if (res)
+//        {
+//            System.out.println("hunda db write success");
+//        }
+//        else
+//        {
+//            System.out.println("hunda db write fail");
+//        }
 
     }
 
