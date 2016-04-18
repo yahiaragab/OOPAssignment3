@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -55,6 +57,8 @@ import static com.example.pmccarthy.mapstest.SphericalUtil.*;
 import com.google.android.gms.common.ConnectionResult;
 //import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
+import android.widget.Toolbar;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         OnMapLongClickListener, OnMarkerClickListener, OnInfoWindowClickListener,
@@ -91,18 +95,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final float height = metrics.heightPixels;
 
         // HERES THE Top Left Button Code
-        Button button = new Button(this);
-        button.setText("Click me");
+
+        Drawable d = getResources().getDrawable(R.drawable.pointer);
+
+        ImageButton button = new ImageButton(this);
+        button.setBackground(d);
         addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
 
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener()
+        {
 
 
             // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
             @Override
             public void onClick(View v)
             {
-                System.out.println("here   " + height);
+                Snackbar.make(v, "RECENT LOCATIONS", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                System.out.println("here");
 
             }
 

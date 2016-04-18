@@ -2,24 +2,33 @@ package com.finder.yahiaragab.finder;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -45,24 +54,29 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
+import com.finder.yahiaragab.finder.GPSOpenHelper;
+import com.finder.yahiaragab.finder.GPSData.*;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
-        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener {
+        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener,
+        OnMarkerDragListener {
 
-    private GoogleMap mMap;
-    private ArrayList<Marker> markers = new ArrayList<Marker>();
+    GPSOpenHelper db;
+    private static GoogleMap mMap;
+    private static ArrayList<Marker> markers = new ArrayList<Marker>();
     private GoogleApiClient client;
     GPSTracker gps;
-    LatLng userLatLng;
-    Polyline line;
-
+    public static LatLng userLatLng;
+    public static Polyline line;
+    Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -75,6 +89,25 @@ public class MapsActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        // HERES THE BUTTON CODE
+        Button button = new Button(this);
+        button.setText("Drop Pin Here");
+        addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                RadioGroup.LayoutParams.WRAP_CONTENT));
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
+            @Override
+            public void onClick(View v)
+            {
+                addMarker(userLatLng);
+
+            }
+
+        });
 
     }
 
@@ -94,14 +127,18 @@ public class MapsActivity extends FragmentActivity
 
         gps = new GPSTracker(MapsActivity.this);
 
-        userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+        userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
 
-
+        mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
+        mMap.setOnMarkerDragListener(this);
 
+//        mMap.getUiSettings().setCompassEnabled(true);
+//        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        mMap.getUiSettings().setRotateGesturesEnabled(true);
 
         // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
         float zoomlevel = 15;
@@ -133,8 +170,6 @@ public class MapsActivity extends FragmentActivity
 //                    Toast.LENGTH_SHORT).show();
 //
 //        }
-
-
     }
 
 
@@ -201,17 +236,68 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onMapClick(LatLng latLng)
     {
+        if (line != null) {
+            line.remove();
+        }
 
+        GPSOpenHelper goh = new GPSOpenHelper(ctx);
+        Cursor cr = goh.getLatlng(goh);
+        //move ptr to first row
+        cr.moveToFirst();
+
+//        System.out.println("LAT: ");
+        do
+        {
+            System.out.println("LAT: " + cr.getString(0) + " YOYOY LONG: " + cr.getString(1));
+        }
+        while (cr.moveToNext());
     }
 
-
+<<<<<<< HEAD
     private String markerName;
     int pinNum = 1;
     double distanceInMeters= 100;
+=======
+>>>>>>> e40e78801530a5adacf0e419ee41f6b0d22c054e
 
 
     @Override
     public void onMapLongClick(final LatLng latLng)
+    {
+        addMarker(latLng);
+
+
+//        Location loc = new Location("Marker");
+//        loc.setLatitude(latLng.latitude);
+//        loc.setLongitude(latLng.longitude);
+//
+//        Log.e("GPSDataContentProvider", loc.toString());
+//
+//        ContentValues values = new ContentValues();
+//
+//        values.put(GPSData.GPSPoint.LONGITUDE, loc.getLongitude());
+//        values.put(GPSData.GPSPoint.LATITUDE, loc.getLatitude());
+//        values.put(GPSData.GPSPoint.TIME, loc.getTime());
+//        getContentResolver().insert(GPSDataContentProvider.CONTENT_URI, values);
+//        if (values != null)
+//        {
+//            System.out.println("YEEEEEEEEEES");
+//        }
+    }
+
+    public void insertLatlng(LatLng latLng)
+    {
+        GPSOpenHelper db = new GPSOpenHelper(ctx);
+        db.insertLatlng(db, latLng);
+        Toast.makeText(getBaseContext(), "Marker added to db", Toast.LENGTH_LONG).show();
+
+    }
+
+    private String markerName;
+    int pinNum = 0;
+    double distanceInMeters= 0;
+
+    public void addMarker(final LatLng latLng)
     {
         markerName = "";
 
@@ -231,7 +317,7 @@ public class MapsActivity extends FragmentActivity
                 markerName = input.getText().toString();
 
                 if (markerName.equals("")) {
-                    markerName = "Pin " + pinNum;
+                    markerName = "Pin " + (pinNum + 1);
                     pinNum++;
                 }
 
@@ -242,6 +328,11 @@ public class MapsActivity extends FragmentActivity
                                 .snippet("Tap and hold to delete pin")
                                 .draggable(true)));
                 markerName = "";
+
+                System.out.println("zzzzzz latlng: " + latLng);
+
+                insertLatlng(latLng);
+
             }
         });
 
@@ -254,18 +345,18 @@ public class MapsActivity extends FragmentActivity
 
         builder.show();
 
-
-        for (int i = 0; i < markers.size(); i++)
-        {
-            System.out.println("Marker " + i + " is at position: " + markers.get(i).getPosition());
-        }
-
     }
 
 
     @Override
     public boolean onMarkerClick(Marker marker)
     {
+<<<<<<< HEAD
+=======
+//        distanceInMeters = 100;
+
+        DecimalFormat df = new DecimalFormat("#0.0");
+>>>>>>> e40e78801530a5adacf0e419ee41f6b0d22c054e
 
         DecimalFormat df = new DecimalFormat("#.0");
         // This goes in right under DecimalFormat
@@ -274,6 +365,7 @@ public class MapsActivity extends FragmentActivity
                 line.remove();
             }
 
+<<<<<<< HEAD
             marker.showInfoWindow();
             userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
             distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
@@ -281,6 +373,14 @@ public class MapsActivity extends FragmentActivity
 
             line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(marker.getPosition())
                     .color(Color.BLUE).width(15));
+=======
+        userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
+
+        distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
+        System.out.println("Distance between two points is " + distanceInMeters);
+
+        drawLine(userLatLng, marker);
+>>>>>>> e40e78801530a5adacf0e419ee41f6b0d22c054e
 
             Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.", Toast.LENGTH_SHORT).show();
             try {
@@ -294,12 +394,26 @@ public class MapsActivity extends FragmentActivity
         return true;
     }
 
+    public static Marker destMarker;
+
+    public static void drawLine(LatLng latLng, Marker marker)
+    {
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+        destMarker = null;
+        line = mMap.addPolyline(new PolylineOptions()
+                .add(latLng).add(markers.get(markers.indexOf(marker)).getPosition())
+                .color(color).width(15));
+        destMarker = marker;
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-        //get directions to this marker
+
     }
+
 
     @Override
     public void onInfoWindowLongClick(Marker marker)
@@ -307,8 +421,38 @@ public class MapsActivity extends FragmentActivity
         //if the user deletes the pin the line is on, delete the line
 
         marker.remove();
+        markers.remove(markers.indexOf(marker));
 //        marker.setTitle();
         Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
+
+        if ( markers.indexOf(marker) == markers.indexOf(destMarker) )
+        {
+            line.remove();
+        }
+
+
     }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker)
+    {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker)
+    {
+        markers.get(markers.indexOf(marker)).setPosition(marker.getPosition());
+        Toast.makeText(ctx,
+                "Destination changed to: " + markers.indexOf(marker),
+                Toast.LENGTH_SHORT).show();
+        destMarker = marker;
+    }
+
 }

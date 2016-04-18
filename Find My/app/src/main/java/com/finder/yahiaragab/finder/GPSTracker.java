@@ -17,8 +17,12 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.finder.yahiaragab.finder.MapsActivity;
 
-public class GPSTracker extends Service implements LocationListener
+
+public class GPSTracker extends Service implements LocationListener, GoogleMap.OnMapLongClickListener
 {
     private final Context context;
 
@@ -32,7 +36,7 @@ public class GPSTracker extends Service implements LocationListener
     double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 10;
 
     protected LocationManager locationManager;
 
@@ -60,7 +64,8 @@ public class GPSTracker extends Service implements LocationListener
             {
                 this.canGetLocation = true;
 
-                if (isNetworkEnabled) {
+                if (isNetworkEnabled)
+                {
 
                     locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
@@ -130,11 +135,13 @@ public class GPSTracker extends Service implements LocationListener
         return longitude;
     }
 
-    public boolean canGetLocation() {
+    public boolean canGetLocation()
+    {
         return this.canGetLocation;
     }
 
-    public void showSettingsAlert() {
+    public void showSettingsAlert()
+    {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
         alertDialog.setTitle("GPS is settings");
@@ -144,7 +151,8 @@ public class GPSTracker extends Service implements LocationListener
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 context.startActivity(intent);
             }
@@ -162,9 +170,17 @@ public class GPSTracker extends Service implements LocationListener
     }
 
     @Override
-    public void onLocationChanged(Location arg0) {
+    public void onLocationChanged(Location location) {
         // TODO Auto-generated method stub
+        this.location = location;
+        if (MapsActivity.line != null) {
+            MapsActivity.line.remove();
 
+            MapsActivity.userLatLng = new LatLng(this.location.getLatitude(), this.location.getLongitude());
+
+
+            MapsActivity.drawLine(MapsActivity.userLatLng, MapsActivity.destMarker);
+        }
     }
 
     @Override
@@ -192,4 +208,8 @@ public class GPSTracker extends Service implements LocationListener
     }
 
 
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+    }
 }
