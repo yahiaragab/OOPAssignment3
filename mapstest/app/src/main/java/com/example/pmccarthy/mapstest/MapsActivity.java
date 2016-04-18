@@ -110,8 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v)
             {
-                Snackbar.make(v, "RECENT LOCATIONS", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                
                 System.out.println("here");
 
             }
