@@ -24,7 +24,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 //                    GPSDataTableInfo.MARKER_USER_ID + " NUMBER(10) PRIMARY KEY " +
                     GPSDataTableInfo.MARKER_LATITUDE + " REAL, " +
                     GPSDataTableInfo.MARKER_LONGITUDE + " REAL, " +
-                    GPSDataTableInfo.MARKER_TIME + " DATETIME " +
+                    GPSDataTableInfo.MARKER_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP " +
                     ");";
 
     GPSOpenHelper(Context context)
@@ -45,7 +45,8 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE " + GPSDataTableInfo.MARKER_TABLE_NAME + ";");
+        onCreate(db);
     }
 
     public void insertLocation(GPSOpenHelper goh, Location loc)
@@ -105,7 +106,8 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         String[] columns =
                 {
                         GPSDataTableInfo.MARKER_LATITUDE,
-                        GPSDataTableInfo.MARKER_LONGITUDE
+                        GPSDataTableInfo.MARKER_LONGITUDE,
+                        GPSDataTableInfo.MARKER_TIME
                 };
         Cursor cr = sqdb.query(GPSDataTableInfo.MARKER_TABLE_NAME, columns,
                 null, null, null, null, null);
