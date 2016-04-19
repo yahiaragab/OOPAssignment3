@@ -4,20 +4,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -51,6 +57,8 @@ import static com.example.pmccarthy.mapstest.SphericalUtil.*;
 import com.google.android.gms.common.ConnectionResult;
 //import com.google.android.gms.common.GooglePlayServicesUtil;
 import android.app.Dialog;
+import android.widget.Toolbar;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         OnMapLongClickListener, OnMarkerClickListener, OnInfoWindowClickListener,
@@ -65,6 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     GPSTracker gps;
+   // SQLiteDatabase mydatabase = openOrCreateDatabase("track_me_back_db",MODE_PRIVATE,null);
+
 
     private GoogleApiClient client;
 
@@ -79,24 +89,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+        //Used these to find the height and width of the screen man
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        float width = metrics.widthPixels;
+        final float height = metrics.heightPixels;
 
-        // HERES THE BUTTON CODE
-        Button button = new Button(this);
-        button.setText("Click me");
+        // HERES THE Top Left Button Code
+
+        Drawable d = getResources().getDrawable(R.drawable.pointer);
+
+        ImageButton button = new ImageButton(this);
+        button.setBackground(d);
         addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
 
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener()
+        {
 
 
             // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
             @Override
             public void onClick(View v)
             {
-                System.out.println("YOU CLICKED ME");
+                
+                System.out.println("here");
 
             }
 
         });
+
+        //Heres the bottom left Button Code
+        // Here you go man heres the code that cereates a second button
+        float x1 = 0;
+        //float y1 = 100;
+        // Looking at trying to add an image to back of button
+        //Drawable d = getResources().getDrawable(R.drawable.common_google_signin_btn_text_light);
+
+        final Button button2 = new Button(this);
+        button2.setText("Recent Places");
+        addContentView(button2, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT));
+        button2.setX(x1);
+        button2.setY(height - 180);
+        //button2.setBackground(d);
+        button2.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW Select statement from the database should go.
+            @Override
+            public void onClick(View v)
+            {
+                System.out.println("1234");
+
+
+            }
+
+        });
+
     }
 
 
@@ -334,6 +381,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this, "Pin deleted",
                 Toast.LENGTH_SHORT).show();
     }
+
 
 
 

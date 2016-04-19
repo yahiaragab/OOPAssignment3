@@ -253,6 +253,9 @@ public class MapsActivity extends FragmentActivity
         while (cr.moveToNext());
     }
 
+    private String markerName;
+    int pinNum = 1;
+    double distanceInMeters= 100;
 
 
     @Override
@@ -349,12 +352,20 @@ public class MapsActivity extends FragmentActivity
 
         DecimalFormat df = new DecimalFormat("#0.0");
 
-        if (line != null)
-        {
-            line.remove();
-        }
+        DecimalFormat df = new DecimalFormat("#.0");
+        // This goes in right under DecimalFormat
+        while(distanceInMeters >= 10) {
+            if (line != null) {
+                line.remove();
+            }
 
-        marker.showInfoWindow();
+            marker.showInfoWindow();
+            userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+            distanceInMeters = SphericalUtil.computeDistanceBetween(userLatLng, marker.getPosition());
+            System.out.println("Distance between two points is " + distanceInMeters);
+
+            line = mMap.addPolyline(new PolylineOptions().add(userLatLng).add(marker.getPosition())
+                    .color(Color.BLUE).width(15));
 
         userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
 
@@ -363,8 +374,14 @@ public class MapsActivity extends FragmentActivity
 
         drawLine(userLatLng, marker);
 
-        Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.",
-                Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Pin: " + df.format(distanceInMeters) + "m away.", Toast.LENGTH_SHORT).show();
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println("Error: in onMarkerClick in Thread.sleep");
+                e.printStackTrace();
+            }
+        }
 
         return true;
     }
