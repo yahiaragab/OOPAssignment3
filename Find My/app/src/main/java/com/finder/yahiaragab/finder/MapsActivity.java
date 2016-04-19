@@ -5,12 +5,15 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,12 +25,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -54,6 +59,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -77,6 +83,7 @@ public class MapsActivity extends FragmentActivity
     public static LatLng userLatLng;
     public static Polyline line;
     Context ctx = this;
+    float zoomlevel = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -90,9 +97,17 @@ public class MapsActivity extends FragmentActivity
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+        //Used these to find the height and width of the screen man
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        float width = metrics.widthPixels;
+        final float height = metrics.heightPixels;
+
+
+
         // HERES THE BUTTON CODE
         Button button = new Button(this);
-        button.setText("Drop Pin Here");
+        button.setText("Drop pin");
+        button.setY(height - 200);
         addContentView(button, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
                 RadioGroup.LayoutParams.WRAP_CONTENT));
 
@@ -101,13 +116,49 @@ public class MapsActivity extends FragmentActivity
 
             // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v1) {
                 addMarker(userLatLng);
 
             }
 
         });
+        Button recent_places = new Button(this);
+        recent_places.setText("Clear Pins");
+        recent_places.setX((width-400)/2);
+        addContentView(recent_places, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                RadioGroup.LayoutParams.WRAP_CONTENT));
+
+        recent_places.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
+            @Override
+            public void onClick(View v) {
+//                System.out.println("test");
+                mMap.clear();
+                markers.clear();
+            }
+
+        });
+        Button clear_pins = new Button(this);
+        clear_pins.setText("Recent Places");
+        clear_pins.setX(width-500);
+        clear_pins.setY(height - 200);
+        addContentView(clear_pins, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                RadioGroup.LayoutParams.WRAP_CONTENT));
+
+        clear_pins.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
+            @Override
+            public void onClick(View view) {
+                System.out.println("recent pins");
+
+            }
+
+        });
+
 
     }
 
@@ -141,7 +192,7 @@ public class MapsActivity extends FragmentActivity
 //        mMap.getUiSettings().setRotateGesturesEnabled(true);
 
         // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
-        float zoomlevel = 15;
+
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, zoomlevel));
 
@@ -247,12 +298,14 @@ public class MapsActivity extends FragmentActivity
 
         do
         {
-            System.out.println(cr.getPosition() + ". LAT: " + cr.getString(0) + " YOYOY LONG: "
-                    + cr.getString(1) + " TIME: " + cr.getString(2));
+            System.out.println(cr.getPosition() +  " NAME: " + cr.getString(0)
+                    + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
+                    + " TIME: " + cr.getString(3));
+
         }
         while (cr.moveToNext());
-    }
 
+    }
 
 
     @Override
@@ -260,29 +313,12 @@ public class MapsActivity extends FragmentActivity
     {
         addMarker(latLng);
 
-
-//        Location loc = new Location("Marker");
-//        loc.setLatitude(latLng.latitude);
-//        loc.setLongitude(latLng.longitude);
-//
-//        Log.e("GPSDataContentProvider", loc.toString());
-//
-//        ContentValues values = new ContentValues();
-//
-//        values.put(GPSData.GPSPoint.LONGITUDE, loc.getLongitude());
-//        values.put(GPSData.GPSPoint.LATITUDE, loc.getLatitude());
-//        values.put(GPSData.GPSPoint.TIME, loc.getTime());
-//        getContentResolver().insert(GPSDataContentProvider.CONTENT_URI, values);
-//        if (values != null)
-//        {
-//            System.out.println("YEEEEEEEEEES");
-//        }
     }
 
-    public void insertLatlng(LatLng latLng)
+    public void insertLatlng(LatLng latLng, String markerName)
     {
         GPSOpenHelper db = new GPSOpenHelper(ctx);
-        db.insertLatlng(db, latLng);
+        db.insertLatlng(db, latLng, markerName);
         Toast.makeText(getBaseContext(), "Marker added to db", Toast.LENGTH_LONG).show();
 
     }
@@ -321,11 +357,9 @@ public class MapsActivity extends FragmentActivity
                                 .title(markerName)
                                 .snippet("Tap and hold to delete pin")
                                 .draggable(true)));
+
+                insertLatlng(latLng, markerName);
                 markerName = "";
-
-                System.out.println("zzzzzz latlng: " + latLng);
-
-                insertLatlng(latLng);
 
             }
         });
@@ -341,11 +375,20 @@ public class MapsActivity extends FragmentActivity
 
     }
 
+    boolean showInfo = false;
 
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-//        distanceInMeters = 100;
+        showInfo = !showInfo;
+        if  (showInfo)
+        {
+            marker.showInfoWindow();
+        }
+        else
+        {
+            marker.hideInfoWindow();
+        }
 
         DecimalFormat df = new DecimalFormat("#0.0");
 
@@ -353,8 +396,6 @@ public class MapsActivity extends FragmentActivity
         {
             line.remove();
         }
-
-        marker.showInfoWindow();
 
         userLatLng = new LatLng(gps.location.getLatitude(), gps.location.getLongitude());
 
@@ -386,6 +427,30 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowClick(Marker marker)
     {
+        // Map point based on address
+//        Uri location = Uri.parse("geo:0,0?q=1600+Amphitheatre+Parkway,+Mountain+View,+California");
+        // Or map point based on latitude/longitude
+
+        Uri sendLoc = Uri.parse("geo:" + marker.getPosition().latitude + ","
+                + marker.getPosition().longitude + "?z=" + zoomlevel); // z param is zoom level
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, sendLoc);
+
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
+        boolean isIntentSafe = activities.size() > 0;
+
+
+        // Always use string resources for UI text.
+        // This says something like "Share this photo with"
+        String title = getResources().getString(R.string.chooser_title);
+        // Create intent to show chooser
+        Intent chooser = Intent.createChooser(mapIntent, title);
+
+        // Verify the intent will resolve to at least one activity
+        if (mapIntent.resolveActivity(getPackageManager()) != null && isIntentSafe)
+        {
+            startActivity(chooser);
+        }
 
     }
 

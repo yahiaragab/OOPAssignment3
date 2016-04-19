@@ -21,7 +21,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 {
     private static final String MARKER_TABLE_CREATE =
             "CREATE TABLE " + GPSDataTableInfo.MARKER_TABLE_NAME + " (" +
-//                    GPSDataTableInfo.MARKER_USER_ID + " NUMBER(10) PRIMARY KEY " +
+                    GPSDataTableInfo.MARKER_NAME + " TEXT, " +
                     GPSDataTableInfo.MARKER_LATITUDE + " REAL, " +
                     GPSDataTableInfo.MARKER_LONGITUDE + " REAL, " +
                     GPSDataTableInfo.MARKER_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP " +
@@ -35,8 +35,6 @@ public class GPSOpenHelper extends SQLiteOpenHelper
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL("DROP TABLE " + GPSDataTableInfo.MARKER_TABLE_NAME);
-
         db.execSQL(MARKER_TABLE_CREATE);
         Log.d("GPSOpenHelper", "Table Created");
         System.out.print("Table created");
@@ -49,22 +47,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         onCreate(db);
     }
 
-    public void insertLocation(GPSOpenHelper goh, Location loc)
-    {
-        SQLiteDatabase SQDB = goh.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put(GPSDataTableInfo.MARKER_LATITUDE, loc.getLatitude() );
-        cv.put(GPSDataTableInfo.MARKER_LONGITUDE, loc.getLongitude() );
-//        cv.put(GPSDataTableInfo.MARKER_TIME, loc.getTime());
-
-        long ret = SQDB.insert(GPSDataTableInfo.MARKER_TABLE_NAME, null, cv);
-
-        Log.d("GPSOpenHelper", "One row inserted");
-
-    }
-
-    public void insertLatlng(GPSOpenHelper db, LatLng latLng)
+    public void insertLatlng(GPSOpenHelper db, LatLng latLng, String markerName)
     {
         try {
             SQLiteDatabase SQDB = db.getWritableDatabase();
@@ -75,6 +58,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
             dateTimeee = Calendar.getInstance();
             String dateTime = getDateTime();
 
+            cv.put(GPSDataTableInfo.MARKER_NAME, markerName);
             cv.put(GPSDataTableInfo.MARKER_LATITUDE, latLng.latitude);
             cv.put(GPSDataTableInfo.MARKER_LONGITUDE, latLng.longitude);
             cv.put(GPSDataTableInfo.MARKER_TIME, dateTime);
@@ -105,6 +89,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         SQLiteDatabase sqdb = db.getReadableDatabase();
         String[] columns =
                 {
+                        GPSDataTableInfo.MARKER_NAME,
                         GPSDataTableInfo.MARKER_LATITUDE,
                         GPSDataTableInfo.MARKER_LONGITUDE,
                         GPSDataTableInfo.MARKER_TIME
