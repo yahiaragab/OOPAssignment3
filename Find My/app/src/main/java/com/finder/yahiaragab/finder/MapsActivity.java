@@ -245,10 +245,10 @@ public class MapsActivity extends FragmentActivity
         //move ptr to first row
         cr.moveToFirst();
 
-//        System.out.println("LAT: ");
         do
         {
-            System.out.println("LAT: " + cr.getString(0) + " YOYOY LONG: " + cr.getString(1));
+            System.out.println(cr.getPosition() + ". LAT: " + cr.getString(0) + " YOYOY LONG: "
+                    + cr.getString(1) + " TIME: " + cr.getString(2));
         }
         while (cr.moveToNext());
     }

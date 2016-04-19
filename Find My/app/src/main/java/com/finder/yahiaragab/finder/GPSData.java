@@ -15,8 +15,9 @@ public final class GPSData
         public static final String DATABASE_NAME = "TrackMeBack.db";
         public static final int DATABASE_VERSION = 1;
 
-        public static final String MARKER_USER_ID = "userID";
-        public static final String MARKER_TABLE_NAME = "marker";
+//        public static final String MARKER_USER_ID = "userID";
+        public static final String MARKER_TABLE_NAME = "markers"
+        ;
         public static final String MARKER_LONGITUDE = "longitude";
         public static final String MARKER_LATITUDE = "latitude";
         public static final String MARKER_TIME = "time";
