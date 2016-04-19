@@ -72,8 +72,8 @@ import com.finder.yahiaragab.finder.GPSData.*;
 
 public class MapsActivity extends FragmentActivity
         implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
-        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener,
-        OnMarkerDragListener {
+        OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener
+        {
 
     GPSOpenHelper db;
     private static GoogleMap mMap;
@@ -141,7 +141,7 @@ public class MapsActivity extends FragmentActivity
 
         });
         Button clear_pins = new Button(this);
-        clear_pins.setText("Recent Places");
+        clear_pins.setText("Recent Pins");
         clear_pins.setX(width-500);
         clear_pins.setY(height - 200);
         addContentView(clear_pins, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
@@ -149,35 +149,72 @@ public class MapsActivity extends FragmentActivity
 
         clear_pins.setOnClickListener(new View.OnClickListener() {
 
-
+            String limit;
             // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
             @Override
             public void onClick(View view)
             {
-                GPSOpenHelper goh = new GPSOpenHelper(ctx);
-                Cursor cr = goh.getRecentMarkers(goh);
-                //move ptr to first row
-                cr.moveToFirst();
+                limit = "";
 
-                do
-                {
-                    System.out.println(cr.getPosition() +  " NAME: " + cr.getString(0)
-                            + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
-                            + " TIME: " + cr.getString(3));
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setTitle("Last how many pins?");
+
+                // Set up the input
+                final EditText input = new EditText(ctx);
+                // Specify the type of input expected
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        limit = input.getText().toString();
+
+                        if (limit.equals("")) {
+                            limit = "5";
+                        }
+
+                        GPSOpenHelper goh = new GPSOpenHelper(ctx);
+                        Cursor cr = goh.getRecentMarkers(goh, limit);
+                        //move ptr to first row
+                        cr.moveToFirst();
+
+                        do
+                        {
+                            System.out.println(cr.getPosition() +  " NAME: " + cr.getString(0)
+                                    + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
+                                    + " TIME: " + cr.getString(3));
 
 //                    Marker marker = addMarker(new MarkerOptions());
-                    double lat = Double.parseDouble(cr.getString(1));
-                    double lng = Double.parseDouble(cr.getString(2));
+                            double lat = Double.parseDouble(cr.getString(1));
+                            double lng = Double.parseDouble(cr.getString(2));
 
-                    LatLng latLng = new LatLng(lat, lng);
-                    markers.add(mMap.addMarker(
-                            new MarkerOptions()
-                                    .position(latLng)
-                                    .title(cr.getString(0))
-                                    .snippet("Tap and hold to delete pin")
-                                    .draggable(true)));
-                }
-                while (cr.moveToNext());
+                            LatLng latLng = new LatLng(lat, lng);
+                            markers.add(mMap.addMarker(
+                                    new MarkerOptions()
+                                            .position(latLng)
+                                            .title(cr.getString(0))
+                                            .snippet("Tap and hold to delete pin")
+                                            .draggable(true)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                            ));
+                        }
+                        while (cr.moveToNext());
+
+                        limit = "";
+
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
 
             }
 
@@ -209,7 +246,6 @@ public class MapsActivity extends FragmentActivity
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
-        mMap.setOnMarkerDragListener(this);
 
 //        mMap.getUiSettings().setCompassEnabled(true);
 //        mMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -384,20 +420,20 @@ public class MapsActivity extends FragmentActivity
 
     }
 
-    boolean showInfo = false;
+//    boolean showInfo = false;
 
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-        showInfo = !showInfo;
-        if  (showInfo)
-        {
+//        showInfo = !showInfo;
+//        if  (showInfo)
+//        {
             marker.showInfoWindow();
-        }
-        else
-        {
-            marker.hideInfoWindow();
-        }
+//        }
+//        else
+//        {
+//            marker.hideInfoWindow();
+//        }
 
         DecimalFormat df = new DecimalFormat("#0.0");
 
@@ -481,27 +517,6 @@ public class MapsActivity extends FragmentActivity
         }
 
 
-    }
-
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker)
-    {
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker)
-    {
-        markers.get(markers.indexOf(marker)).setPosition(marker.getPosition());
-        Toast.makeText(ctx,
-                "Destination changed to: " + markers.indexOf(marker),
-                Toast.LENGTH_SHORT).show();
-        destMarker = marker;
     }
 
 }

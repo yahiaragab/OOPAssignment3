@@ -100,7 +100,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
     }
 
     //retrieving info
-    public Cursor getRecentMarkers(GPSOpenHelper db)
+    public Cursor getRecentMarkers(GPSOpenHelper db, String limit)
     {
         SQLiteDatabase sqdb = db.getReadableDatabase();
         String currentDate = getDateTime();
@@ -112,7 +112,7 @@ public class GPSOpenHelper extends SQLiteOpenHelper
                         GPSDataTableInfo.MARKER_TIME
                 };
         Cursor cr = sqdb.query(GPSDataTableInfo.MARKER_TABLE_NAME, columns,
-                  GPSDataTableInfo.MARKER_TIME + " < '" + currentDate + "'", null, null, null, null, "5");
+                  GPSDataTableInfo.MARKER_TIME + " < '" + currentDate + "'", null, null, null, null, limit);
         return cr;
     }
 

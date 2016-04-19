@@ -1,3 +1,5 @@
+//Reference: https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/
+
 package com.finder.yahiaragab.finder;
 
 import static java.lang.Math.*;

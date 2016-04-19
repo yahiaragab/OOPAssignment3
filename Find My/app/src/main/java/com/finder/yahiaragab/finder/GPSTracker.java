@@ -35,7 +35,7 @@ public class GPSTracker extends Service implements LocationListener, GoogleMap.O
     double latitude;
     double longitude;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 10;
 
     protected LocationManager locationManager;
@@ -172,6 +172,11 @@ public class GPSTracker extends Service implements LocationListener, GoogleMap.O
     @Override
     public void onLocationChanged(Location location) {
         // TODO Auto-generated method stub
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.location = location;
         if (MapsActivity.line != null) {
             MapsActivity.line.remove();
