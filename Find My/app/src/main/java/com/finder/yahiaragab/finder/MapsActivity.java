@@ -152,8 +152,32 @@ public class MapsActivity extends FragmentActivity
 
             // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
             @Override
-            public void onClick(View view) {
-                System.out.println("recent pins");
+            public void onClick(View view)
+            {
+                GPSOpenHelper goh = new GPSOpenHelper(ctx);
+                Cursor cr = goh.getRecentMarkers(goh);
+                //move ptr to first row
+                cr.moveToFirst();
+
+                do
+                {
+                    System.out.println(cr.getPosition() +  " NAME: " + cr.getString(0)
+                            + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
+                            + " TIME: " + cr.getString(3));
+
+//                    Marker marker = addMarker(new MarkerOptions());
+                    double lat = Double.parseDouble(cr.getString(1));
+                    double lng = Double.parseDouble(cr.getString(2));
+
+                    LatLng latLng = new LatLng(lat, lng);
+                    markers.add(mMap.addMarker(
+                            new MarkerOptions()
+                                    .position(latLng)
+                                    .title(cr.getString(0))
+                                    .snippet("Tap and hold to delete pin")
+                                    .draggable(true)));
+                }
+                while (cr.moveToNext());
 
             }
 
@@ -291,20 +315,6 @@ public class MapsActivity extends FragmentActivity
             line.remove();
         }
 
-        GPSOpenHelper goh = new GPSOpenHelper(ctx);
-        Cursor cr = goh.getLatlng(goh);
-        //move ptr to first row
-        cr.moveToFirst();
-
-        do
-        {
-            System.out.println(cr.getPosition() +  " NAME: " + cr.getString(0)
-                    + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
-                    + " TIME: " + cr.getString(3));
-
-        }
-        while (cr.moveToNext());
-
     }
 
 
@@ -319,7 +329,6 @@ public class MapsActivity extends FragmentActivity
     {
         GPSOpenHelper db = new GPSOpenHelper(ctx);
         db.insertLatlng(db, latLng, markerName);
-        Toast.makeText(getBaseContext(), "Marker added to db", Toast.LENGTH_LONG).show();
 
     }
 

@@ -33,18 +33,18 @@
       <file leaf-file-name="MapsActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6742857">
-              <caret line="361" column="32" selection-start-line="361" selection-start-column="32" selection-end-line="361" selection-end-column="32" />
+            <state vertical-scroll-proportion="2.8700266">
+              <caret line="315" column="9" selection-start-line="315" selection-start-column="9" selection-end-line="315" selection-end-column="9" />
               <folding>
                 <element signature="e#4335#4565#0" expanded="true" />
                 <element signature="e#4564#4565#0" expanded="true" />
                 <element signature="e#4907#5205#0" expanded="true" />
                 <element signature="e#5204#5205#0" expanded="true" />
-                <element signature="e#5570#5814#0" expanded="true" />
-                <element signature="e#5813#5814#0" expanded="true" />
-                <element signature="e#13035#13222#0" expanded="true" />
-                <element signature="e#13221#13222#0" expanded="true" />
-                <element signature="e#15456#15504#0" expanded="true" />
+                <element signature="e#5570#6907#0" expanded="true" />
+                <element signature="e#6906#6907#0" expanded="true" />
+                <element signature="e#13610#13797#0" expanded="true" />
+                <element signature="e#13796#13797#0" expanded="true" />
+                <element signature="e#16031#16079#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -54,7 +54,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSOpenHelper.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="58" column="44" selection-start-line="58" selection-start-column="44" selection-end-line="58" selection-end-column="44" />
+              <caret line="110" column="51" selection-start-line="110" selection-start-column="49" selection-end-line="110" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -1913,11 +1913,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_maps.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSData.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSOpenHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSData.java" />
       </list>
     </option>
   </component>
@@ -2055,6 +2056,10 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="manifests" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -2064,9 +2069,9 @@
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="4d0043f1bcf11185" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="4dde69a8" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_4_API_23" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/OOPAssignment3/Find My/build.gradle" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/OOPAssignment3/Find My" />
   </component>
   <component name="RunManager" selected="Android Application.app">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -2265,37 +2270,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.6666666">
-          <caret line="3" column="50" selection-start-line="3" selection-start-column="50" selection-end-line="3" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSTracker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.24403183">
           <caret line="181" column="0" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_maps.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38793105">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSOpenHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="58" column="44" selection-start-line="58" selection-start-column="44" selection-end-line="58" selection-end-column="44" />
           <folding />
         </state>
       </provider>
@@ -2308,20 +2286,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_maps.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.5517242">
+          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.7777777">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3633952">
+          <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
+          <folding>
+            <element signature="e#1933#1962#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/GPSOpenHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="110" column="51" selection-start-line="110" selection-start-column="49" selection-end-line="110" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/finder/yahiaragab/finder/MapsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6742857">
-          <caret line="361" column="32" selection-start-line="361" selection-start-column="32" selection-end-line="361" selection-end-column="32" />
+        <state vertical-scroll-proportion="2.8700266">
+          <caret line="315" column="9" selection-start-line="315" selection-start-column="9" selection-end-line="315" selection-end-column="9" />
           <folding>
             <element signature="e#4335#4565#0" expanded="true" />
             <element signature="e#4564#4565#0" expanded="true" />
             <element signature="e#4907#5205#0" expanded="true" />
             <element signature="e#5204#5205#0" expanded="true" />
-            <element signature="e#5570#5814#0" expanded="true" />
-            <element signature="e#5813#5814#0" expanded="true" />
-            <element signature="e#13035#13222#0" expanded="true" />
-            <element signature="e#13221#13222#0" expanded="true" />
-            <element signature="e#15456#15504#0" expanded="true" />
+            <element signature="e#5570#6907#0" expanded="true" />
+            <element signature="e#6906#6907#0" expanded="true" />
+            <element signature="e#13610#13797#0" expanded="true" />
+            <element signature="e#13796#13797#0" expanded="true" />
+            <element signature="e#16031#16079#0" expanded="true" />
           </folding>
         </state>
       </provider>
