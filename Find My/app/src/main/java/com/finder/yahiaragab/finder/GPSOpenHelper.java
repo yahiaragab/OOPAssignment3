@@ -5,15 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.location.Location;
 import android.util.Log;
 
 import com.finder.yahiaragab.finder.GPSData.GPSDataTableInfo;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -38,13 +35,11 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         db.execSQL(MARKER_TABLE_CREATE);
         Log.d("GPSOpenHelper", "Table Created");
         System.out.print("Table created");
-//        db.execSQL("DROP TABLE IF EXISTS " + GPSDataTableInfo.MARKER_TABLE_NAME);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + GPSDataTableInfo.MARKER_TABLE_NAME + ";");
-        onCreate(db);
+
     }
 
     public void insertLatlng(GPSOpenHelper db, LatLng latLng, String markerName)
@@ -53,9 +48,6 @@ public class GPSOpenHelper extends SQLiteOpenHelper
             SQLiteDatabase SQDB = db.getWritableDatabase();
             ContentValues cv = new ContentValues();
 
-            Calendar dateTimeee = null;
-
-            dateTimeee = Calendar.getInstance();
             String dateTime = getDateTime();
 
             cv.put(GPSDataTableInfo.MARKER_NAME, markerName);
@@ -83,21 +75,6 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         return dateFormat.format(date);
     }
 
-    //retrieving info
-    public Cursor getLatlng(GPSOpenHelper db)
-    {
-        SQLiteDatabase sqdb = db.getReadableDatabase();
-        String[] columns =
-                {
-                        GPSDataTableInfo.MARKER_NAME,
-                        GPSDataTableInfo.MARKER_LATITUDE,
-                        GPSDataTableInfo.MARKER_LONGITUDE,
-                        GPSDataTableInfo.MARKER_TIME
-                };
-        Cursor cr = sqdb.query(GPSDataTableInfo.MARKER_TABLE_NAME, columns,
-                null, null, null, null, null);
-        return cr;
-    }
 
     //retrieving info
     public Cursor getRecentMarkers(GPSOpenHelper db, String limit)

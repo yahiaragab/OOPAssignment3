@@ -1,25 +1,20 @@
 package com.finder.yahiaragab.finder;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.finder.yahiaragab.finder.MapsActivity;
 
 
 public class GPSTracker extends Service implements LocationListener, GoogleMap.OnMapLongClickListener
@@ -36,7 +31,7 @@ public class GPSTracker extends Service implements LocationListener, GoogleMap.O
     double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 100;
 
     protected LocationManager locationManager;
 
@@ -173,19 +168,20 @@ public class GPSTracker extends Service implements LocationListener, GoogleMap.O
     public void onLocationChanged(Location location) {
         // TODO Auto-generated method stub
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
+            this.location = location;
+            if (MapsActivity.line != null) {
+                MapsActivity.line.remove();
+
+                MapsActivity.userLatLng = new LatLng(this.location.getLatitude(), this.location.getLongitude());
+
+
+                MapsActivity.drawLine(MapsActivity.userLatLng, MapsActivity.destMarker);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        this.location = location;
-        if (MapsActivity.line != null) {
-            MapsActivity.line.remove();
 
-            MapsActivity.userLatLng = new LatLng(this.location.getLatitude(), this.location.getLongitude());
-
-
-            MapsActivity.drawLine(MapsActivity.userLatLng, MapsActivity.destMarker);
-        }
     }
 
     @Override
