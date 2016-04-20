@@ -127,12 +127,7 @@ public class MapsActivity extends FragmentActivity
                     }
                 });
 
-//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
+
 
                 builder.show();
 
@@ -149,11 +144,9 @@ public class MapsActivity extends FragmentActivity
 
         recent_places.setOnClickListener(new View.OnClickListener() {
 
-
             // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
             @Override
             public void onClick(View v) {
-//                System.out.println("test");
                 mMap.clear();
                 markers.clear();
             }
