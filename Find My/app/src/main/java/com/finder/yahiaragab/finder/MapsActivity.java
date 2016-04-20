@@ -140,6 +140,7 @@ public class MapsActivity extends FragmentActivity
             }
 
         });
+
         Button clear_pins = new Button(this);
         clear_pins.setText("Recent Pins");
         clear_pins.setX(width-500);
@@ -195,7 +196,7 @@ public class MapsActivity extends FragmentActivity
                                     new MarkerOptions()
                                             .position(latLng)
                                             .title(cr.getString(0))
-                                            .snippet("Tap and hold to delete pin")
+                                            .snippet("-Tap: SV -Hold: DEL")
                                             .draggable(true)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                             ));
@@ -359,6 +360,12 @@ public class MapsActivity extends FragmentActivity
     {
         addMarker(latLng);
 
+        Toast.makeText(this, "-Tap Pin to toggle Info Window On\n" +
+                        "-Tap Info Window for StreetView\n" +
+                        "-Tap & Hold IW to DELETE Pin",
+                Toast.LENGTH_LONG).show();
+
+
     }
 
     public void insertLatlng(LatLng latLng, String markerName)
@@ -400,7 +407,7 @@ public class MapsActivity extends FragmentActivity
                         new MarkerOptions()
                                 .position(latLng)
                                 .title(markerName)
-                                .snippet("Tap and hold to delete pin")
+                                .snippet("-Tap: SV -Hold: DEL")
                                 .draggable(true)));
 
                 insertLatlng(latLng, markerName);
@@ -420,20 +427,20 @@ public class MapsActivity extends FragmentActivity
 
     }
 
-//    boolean showInfo = false;
+    boolean showInfo = false;
 
     @Override
     public boolean onMarkerClick(Marker marker)
     {
-//        showInfo = !showInfo;
-//        if  (showInfo)
-//        {
+        showInfo = !showInfo;
+        if  (showInfo)
+        {
             marker.showInfoWindow();
-//        }
-//        else
-//        {
-//            marker.hideInfoWindow();
-//        }
+        }
+        else
+        {
+            marker.hideInfoWindow();
+        }
 
         DecimalFormat df = new DecimalFormat("#0.0");
 
@@ -472,29 +479,24 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-        // Map point based on address
-//        Uri location = Uri.parse("geo:0,0?q=1600+Amphitheatre+Parkway,+Mountain+View,+California");
-        // Or map point based on latitude/longitude
+        int rot = 90;
+        int pitch = 0;
+        double zoom = 1.0;
+        int mapZoom = 8;
 
-        Uri sendLoc = Uri.parse("geo:" + marker.getPosition().latitude + ","
-                + marker.getPosition().longitude + "?z=" + zoomlevel); // z param is zoom level
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, sendLoc);
+        Intent streetIntent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("google.streetview:cbll=" + marker.getPosition().latitude + ","
+                        + marker.getPosition().longitude + "&cbp=1," + rot + ",," + pitch
+                        + "," + zoom + "&mz=" + mapZoom +  ""));
 
         PackageManager packageManager = getPackageManager();
-        List<ResolveInfo> activities = packageManager.queryIntentActivities(mapIntent, 0);
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(streetIntent, 0);
         boolean isIntentSafe = activities.size() > 0;
 
-
-        // Always use string resources for UI text.
-        // This says something like "Share this photo with"
-        String title = getResources().getString(R.string.chooser_title);
-        // Create intent to show chooser
-        Intent chooser = Intent.createChooser(mapIntent, title);
-
         // Verify the intent will resolve to at least one activity
-        if (mapIntent.resolveActivity(getPackageManager()) != null && isIntentSafe)
+        if (isIntentSafe)
         {
-            startActivity(chooser);
+            startActivity(streetIntent);
         }
 
     }
