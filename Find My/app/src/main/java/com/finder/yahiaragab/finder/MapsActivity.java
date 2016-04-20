@@ -79,9 +79,6 @@ public class MapsActivity extends FragmentActivity
         float width = metrics.widthPixels;
         final float height = metrics.heightPixels;
 
-        GPSOpenHelper goh = new GPSOpenHelper(ctx);
-        db = db.deleteOldMarkers(goh);
-
         // HERES THE BUTTON CODE
         Button button = new Button(this);
         button.setText("Drop pin");
@@ -100,9 +97,53 @@ public class MapsActivity extends FragmentActivity
             }
 
         });
+
+
+        Button help = new Button(this);
+        help.setText("?");
+        help.setX(( (width - 400) / 4 ) );
+        addContentView(help, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+                RadioGroup.LayoutParams.WRAP_CONTENT));
+
+        help.setOnClickListener(new View.OnClickListener() {
+
+
+            // THIS IS WHERE THE DRAW THE LINE FUNCTION SHOULD BE PUT
+            @Override
+            public void onClick(View v1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setTitle("Help:");
+                builder.setMessage("-Tap & Hold Map to DROP PIN\n\n" +
+                        "-Tap a pin to DISPLAY Info Window (IW)\n\n" +
+                        "-Tap IW to open pin location in STREET VIEW\n\n" +
+                        "-Tap & Hold IW to DELETE Pin");
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+                });
+
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+
+                builder.show();
+
+            }
+
+        });
+
+
         Button recent_places = new Button(this);
         recent_places.setText("Clear Pins");
-        recent_places.setX((width-400)/2);
+        recent_places.setX( 3*(width-400) / 4);
         addContentView(recent_places, new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
                 RadioGroup.LayoutParams.WRAP_CONTENT));
 
@@ -168,24 +209,34 @@ public class MapsActivity extends FragmentActivity
                             //move ptr to first row
                             cr.moveToFirst();
 
-                            do {
-                                System.out.println(cr.getPosition() + " NAME: " + cr.getString(0)
-                                        + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
-                                        + " TIME: " + cr.getString(3));
+                            do
+                            {
+                                if (cr.getPosition() > 29)
+                                {
+                                    goh.deleteOldMarkers(goh, cr.getString(3));
+//                                    break;
+                                }
+                                else
+                                {
+                                    System.out.println(cr.getPosition() + " NAME: " + cr.getString(0)
+                                            + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
+                                            + " TIME: " + cr.getString(3));
 
-//                                Marker marker = addMarker(new MarkerOptions());
-                                double lat = Double.parseDouble(cr.getString(1));
-                                double lng = Double.parseDouble(cr.getString(2));
+                                    //                                Marker marker = addMarker(new MarkerOptions());
+                                    double lat = Double.parseDouble(cr.getString(1));
+                                    double lng = Double.parseDouble(cr.getString(2));
 
-                                LatLng latLng = new LatLng(lat, lng);
-                                markers.add(mMap.addMarker(
-                                        new MarkerOptions()
-                                                .position(latLng)
-                                                .title(cr.getString(0))
-                                                .snippet("-Tap: SV -Hold: DEL")
-                                                .draggable(true)
-                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                                ));
+                                    LatLng latLng = new LatLng(lat, lng);
+                                    markers.add(mMap.addMarker(
+                                            new MarkerOptions()
+                                                    .position(latLng)
+                                                    .title(cr.getString(0))
+                                                    .snippet("-Tap: SV -Hold: DEL")
+                                                    .draggable(true)
+                                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                    ));
+                                }
+
                             }
                             while (cr.moveToNext());
 
@@ -412,7 +463,7 @@ public class MapsActivity extends FragmentActivity
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
         destMarker = null;
-        if (marker != null)
+        if (markers.indexOf(marker) > -1)
         {
             line = mMap.addPolyline(new PolylineOptions()
                     .add(latLng).add(markers.get(markers.indexOf(marker)).getPosition())
