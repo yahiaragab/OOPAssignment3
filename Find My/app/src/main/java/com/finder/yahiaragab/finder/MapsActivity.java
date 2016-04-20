@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Random;
 
 public class MapsActivity extends FragmentActivity
-        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback, OnTouchListener,
+        implements OnMapClickListener, OnMapLongClickListener, OnMapReadyCallback,
         OnMarkerClickListener, OnInfoWindowClickListener, OnInfoWindowLongClickListener
         {
 
@@ -79,7 +79,8 @@ public class MapsActivity extends FragmentActivity
         float width = metrics.widthPixels;
         final float height = metrics.heightPixels;
 
-
+        GPSOpenHelper goh = new GPSOpenHelper(ctx);
+        db = db.deleteOldMarkers(goh);
 
         // HERES THE BUTTON CODE
         Button button = new Button(this);
@@ -155,32 +156,41 @@ public class MapsActivity extends FragmentActivity
 
                         GPSOpenHelper goh = new GPSOpenHelper(ctx);
                         Cursor cr = goh.getRecentMarkers(goh, limit);
-                        //move ptr to first row
-                        cr.moveToFirst();
 
-                        do
+                        if ( cr.getCount() < 1 )
                         {
-                            System.out.println(cr.getPosition() +  " NAME: " + cr.getString(0)
-                                    + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
-                                    + " TIME: " + cr.getString(3));
-
-//                    Marker marker = addMarker(new MarkerOptions());
-                            double lat = Double.parseDouble(cr.getString(1));
-                            double lng = Double.parseDouble(cr.getString(2));
-
-                            LatLng latLng = new LatLng(lat, lng);
-                            markers.add(mMap.addMarker(
-                                    new MarkerOptions()
-                                            .position(latLng)
-                                            .title(cr.getString(0))
-                                            .snippet("-Tap: SV -Hold: DEL")
-                                            .draggable(true)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                            ));
+                            Toast.makeText(ctx, "NO RECENT PINS FOUND", Toast.LENGTH_LONG).show();
                         }
-                        while (cr.moveToNext());
+                        else
+                        {
+                            Toast.makeText(ctx, "Returned " + cr.getCount() + " Pins.", Toast.LENGTH_LONG).show();
 
-                        limit = "";
+                            //move ptr to first row
+                            cr.moveToFirst();
+
+                            do {
+                                System.out.println(cr.getPosition() + " NAME: " + cr.getString(0)
+                                        + ". LAT: " + cr.getString(1) + " LONG: " + cr.getString(2)
+                                        + " TIME: " + cr.getString(3));
+
+//                                Marker marker = addMarker(new MarkerOptions());
+                                double lat = Double.parseDouble(cr.getString(1));
+                                double lng = Double.parseDouble(cr.getString(2));
+
+                                LatLng latLng = new LatLng(lat, lng);
+                                markers.add(mMap.addMarker(
+                                        new MarkerOptions()
+                                                .position(latLng)
+                                                .title(cr.getString(0))
+                                                .snippet("-Tap: SV -Hold: DEL")
+                                                .draggable(true)
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                ));
+                            }
+                            while (cr.moveToNext());
+
+                            limit = "";
+                        }
 
                     }
                 });
@@ -201,16 +211,6 @@ public class MapsActivity extends FragmentActivity
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -224,12 +224,6 @@ public class MapsActivity extends FragmentActivity
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
-
-//        mMap.getUiSettings().setCompassEnabled(true);
-//        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-//        mMap.getUiSettings().setRotateGesturesEnabled(true);
-
-        // LatLng Ststephensgreen1 = new LatLng(56.338340, -15.259376);
 
         //sets where camera starts and the zoom level of the camera
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, zoomlevel));
@@ -248,17 +242,6 @@ public class MapsActivity extends FragmentActivity
         }
         mMap.setMyLocationEnabled(true);
 
-
-
-        //new zoom options
-//        UiSettings.setZoomControlsEnabled(true);
-
-//        if (distanceInMeters < 5)
-//        {
-//            Toast.makeText(this, "You are 5 meters away",
-//                    Toast.LENGTH_SHORT).show();
-//
-//        }
     }
 
 
@@ -298,27 +281,9 @@ public class MapsActivity extends FragmentActivity
                 // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://com.finder.yahiaragab.finder/http/host/path")
         );
+
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
-    }
-
-
-    @Override
-    public boolean onTouch(View v, MotionEvent me)
-    {
-//        float xx = me.getX();
-//        float yy = me.getY();
-//
-//        switch (me.getAction())
-//        {
-//            case MotionEvent.ACTION_DOWN:
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                break;
-//        }
-        return true;
     }
 
 
@@ -447,9 +412,12 @@ public class MapsActivity extends FragmentActivity
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
         destMarker = null;
-        line = mMap.addPolyline(new PolylineOptions()
-                .add(latLng).add(markers.get(markers.indexOf(marker)).getPosition())
-                .color(color).width(15));
+        if (marker != null)
+        {
+            line = mMap.addPolyline(new PolylineOptions()
+                    .add(latLng).add(markers.get(markers.indexOf(marker)).getPosition())
+                    .color(color).width(15));
+        }
         destMarker = marker;
     }
 

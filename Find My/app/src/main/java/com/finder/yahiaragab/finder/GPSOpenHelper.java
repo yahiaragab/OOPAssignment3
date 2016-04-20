@@ -93,6 +93,26 @@ public class GPSOpenHelper extends SQLiteOpenHelper
         return cr;
     }
 
+    //retrieving info
+    public Cursor deleteOldMarkers(GPSOpenHelper db)
+    {
+        SQLiteDatabase sqdb = db.getReadableDatabase();
+        String currentDate = getDateTime();
+        String[] columns =
+                {
+                        GPSDataTableInfo.MARKER_NAME,
+                        GPSDataTableInfo.MARKER_LATITUDE,
+                        GPSDataTableInfo.MARKER_LONGITUDE,
+                        GPSDataTableInfo.MARKER_TIME
+                };
+//        Cursor cr = sqdb.delete(GPSDataTableInfo.MARKER_TABLE_NAME, columns,
+//                GPSDataTableInfo.MARKER_TIME + " < '" + currentDate + "'", null, null, null, null, null);
+        sqdb.execSQL("delete from " +GPSDataTableInfo.MARKER_TABLE_NAME +
+                "Where time  > " + (currentDate - 0) + ";", new String[]{});
+
+        return cr;
+    }
+
 
 
 }
